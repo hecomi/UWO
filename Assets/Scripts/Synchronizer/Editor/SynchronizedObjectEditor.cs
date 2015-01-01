@@ -8,8 +8,25 @@ public class SynchronizedObjectEditor : Editor
 	public override void OnInspectorGUI()
 	{
 		SetPrefabPath();
-		AddSynchronizerGameObject();
+		SynchronizerEditorUtility.AddSynchronizerGameObject();
+
+		DrawOriginalInspector();
+		SynchronizerEditorUtility.DrawHorizontalLine(10f);
 		DrawDefaultInspector();
+	}
+
+	void DrawOriginalInspector()
+	{
+		var syncObj = target as SynchronizedObject;
+		SynchronizerEditorUtility.ReadOnlyTextField("Sync ID", syncObj.id);
+		if (syncObj.isOverridePrefab) {
+			var prefabPath = EditorGUILayout.TextField("Prefab Path", syncObj.prefabPath);
+			if (prefabPath != syncObj.prefabPath) {
+				syncObj.prefabPath = prefabPath;
+			}
+		} else {
+			SynchronizerEditorUtility.ReadOnlyTextField("Prefab Path", syncObj.prefabPath);
+		}
 	}
 
 	void SetPrefabPath()
@@ -29,12 +46,4 @@ public class SynchronizedObjectEditor : Editor
 			}
 		}
     }
-
-	void AddSynchronizerGameObject()
-	{
-		if (GameObject.FindObjectOfType<Synchronizer>() == null) {
-			var obj = new GameObject("Synchronizer");
-			obj.AddComponent<Synchronizer>();
-		}
-	}
 }

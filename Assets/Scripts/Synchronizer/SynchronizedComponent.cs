@@ -5,6 +5,7 @@ using System.Collections;
 public abstract class SynchronizedComponent: MonoBehaviour
 {
 	static private readonly char[] Delimiter = new char[] {','};
+	[HideInInspector]
 	public string id = System.Guid.Empty.ToString();
 
 	private SynchronizedObject syncObject_;
@@ -38,7 +39,9 @@ public abstract class SynchronizedComponent: MonoBehaviour
 		get { return this.GetType().Name; }
 	}
 
+	[HideInInspector]
 	public float heartBeatDuration = 1f;
+	[HideInInspector]
 	public float sendFrameRate = 30f;
 	public float sendFrequency
 	{

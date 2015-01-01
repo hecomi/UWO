@@ -3,6 +3,7 @@ using System.Collections;
 
 public class SynchronizedObject : MonoBehaviour 
 {
+	[HideInInspector]
 	public string id = System.Guid.Empty.ToString();
 	public bool isLocal = true;
 	public bool isOverridePrefab = false;
@@ -13,6 +14,7 @@ public class SynchronizedObject : MonoBehaviour
 		set { isLocal = !value; }
 	}
 	public bool isSetNetworkRigidBodyKinematicAutomatically = true;
+	[HideInInspector]
 	public string prefabPath = "Not Set";
 
 	public float deadTime = 5f;
