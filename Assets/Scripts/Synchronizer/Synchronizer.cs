@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using UWO;
 
 // Synchronizer はローカルとサーバの橋渡しをするクラス
 // 各 GameObject と SynchronizedComponent の管理や、
@@ -17,10 +18,8 @@ public class Synchronizer : MonoBehaviour
 
 	private const char CommandDelimiterChar = '\t';
 	private const char MessageDelimiterChar = '\n';
-	private const char ParamDelimiterChar   = ',';
 	static private readonly char[] CommandDelimiter = new char[] {CommandDelimiterChar};
 	static private readonly char[] MessageDelimiter = new char[] {MessageDelimiterChar};
-	static private readonly char[] ParamDelimiter   = new char[] {ParamDelimiterChar};
 
 	// Resources 内の Prefab を Instantiate した時に
 	// そのプレファブのパス（e.g. Bullet/Big）を特定するためのマップ
@@ -102,8 +101,8 @@ public class Synchronizer : MonoBehaviour
 			foreach (var obj in addedNetworkGameObjects_) {
 				message += "a" + CommandDelimiterChar +
 					obj.prefabPath + CommandDelimiterChar + 
-					obj.position.ToString().Replace("(", "").Replace(")", "") + CommandDelimiterChar + 
-					obj.rotation.ToString().Replace("(", "").Replace(")", "") + MessageDelimiterChar;
+					obj.position.AsString() + CommandDelimiterChar + 
+					obj.rotation.AsString() + MessageDelimiterChar;
 			}
 			addedNetworkGameObjects_.Clear();
 
@@ -149,9 +148,9 @@ public class Synchronizer : MonoBehaviour
 			return;
 		}
 
-		IsMaster = bool.Parse(args[1]);
-		Timestamp = ulong.Parse(args[2]);
-		ConnectionsNum = int.Parse(args[3]);
+		IsMaster = args[1].AsBool();
+		Timestamp = args[2].AsUlong();
+		ConnectionsNum = args[3].AsInt();
 	}
 
 	void AddNetworkGameObject(string[] args)
@@ -162,17 +161,14 @@ public class Synchronizer : MonoBehaviour
 		}
 
 		var prefabPath = args[1];
-		var posArg     = args[2].Split(ParamDelimiter);
-		var rotArg     = args[3].Split(ParamDelimiter);
 		var prefab = Resources.Load<GameObject>(prefabPath);
 		if (prefab == null) {
 			Debug.LogWarning(prefabPath + " is invalid prefab path");
 			return;
 		}
-		var position = new Vector3(
-			float.Parse(posArg[0]), float.Parse(posArg[1]), float.Parse(posArg[2]));
-		var rotation = new Quaternion(
-			float.Parse(rotArg[0]), float.Parse(rotArg[1]), float.Parse(rotArg[2]), float.Parse(rotArg[3]));
+
+		var position = args[2].AsVector3();
+		var rotation = args[3].AsQuaternion();
 		Instantiate(prefab, position, rotation);
 	}
 
@@ -375,3 +371,4 @@ public class Synchronizer : MonoBehaviour
 	}
 	*/
 }
+

@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UWO;
 
 [RequireComponent(typeof(SynchronizedObject))]
 public abstract class SynchronizedComponent: MonoBehaviour
 {
-	static private readonly char[] Delimiter = new char[] {','};
 	[HideInInspector]
 	public string id = System.Guid.Empty.ToString();
 
@@ -125,33 +125,57 @@ public abstract class SynchronizedComponent: MonoBehaviour
 		Send(value, "string");
 	}
 
+	protected void Send(bool value)
+	{
+		Send(value.AsString(), "bool");
+	}
+
 	protected void Send(int value)
 	{
-		Send(Encode(value), "int");
+		Send(value.AsString(), "int");
+	}
+
+	protected void Send(uint value)
+	{
+		Send(value.AsString(), "uint");
+	}
+
+	protected void Send(long value)
+	{
+		Send(value.AsString(), "uint");
+	}
+
+	protected void Send(ulong value)
+	{
+		Send(value.AsString(), "uint");
 	}
 
 	protected void Send(float value)
 	{
-		Send(Encode(value), "float");
+		Send(value.AsString(), "float");
 	}
 
 	protected void Send(Vector2 value)
 	{
-		Send(Encode(value), "vector2");
+		Send(value.AsString(), "vector2");
 	}
 
 	protected void Send(Vector3 value)
 	{
-		Send(Encode(value), "vector3");
+		Send(value.AsString(), "vector3");
 	}
 
 	protected void Send(Quaternion value)
 	{
-		Send(Encode(value), "quaternion");
+		Send(value.AsString(), "quaternion");
 	}
 
 	protected virtual void OnReceive(string value) {}
 	protected virtual void OnReceive(int value) {}
+	protected virtual void OnReceive(uint value) {}
+	protected virtual void OnReceive(long value) {}
+	protected virtual void OnReceive(ulong value) {}
+	protected virtual void OnReceive(bool value) {}
 	protected virtual void OnReceive(float value) {}
 	protected virtual void OnReceive(Vector2 value) {}
 	protected virtual void OnReceive(Vector3 value) {}
@@ -167,77 +191,36 @@ public abstract class SynchronizedComponent: MonoBehaviour
 				OnReceive(value);
 				break;
 			case "int":
-				OnReceive(DecodeToInt(value));
+				OnReceive(value.AsInt());
+				break;
+			case "uint":
+				OnReceive(value.AsUint());
+				break;
+			case "long":
+				OnReceive(value.AsLong());
+				break;
+			case "ulong":
+				OnReceive(value.AsUlong());
+				break;
+			case "bool":
+				OnReceive(value.AsBool());
 				break;
 			case "float":
-				OnReceive(DecodeToFloat(value));
+				OnReceive(value.AsFloat());
 				break;
 			case "vector2":
-				OnReceive(DecodeToVector2(value));
+				OnReceive(value.AsVector2());
 				break;
 			case "vector3":
-				OnReceive(DecodeToVector3(value));
+				OnReceive(value.AsVector3());
 				break;
 			case "quaternion":
-				OnReceive(DecodeToQuaternion(value));
+				OnReceive(value.AsQuaternion());
 				break;
 			default:
 				Debug.LogWarning("typeof(" + type + ") is invalid type for the value of: " + value);
 				break;
 		}
-	}
-
-	int DecodeToInt(string value) {
-		return int.Parse(value);
-	}
-
-	float DecodeToFloat(string value)
-	{
-		return float.Parse(value);
-	}
-
-	Vector2 DecodeToVector2(string value)
-	{
-		var args = value.Split(Delimiter);
-		return new Vector2(float.Parse(args[0]), float.Parse(args[1]));
-	}
-
-	Vector3 DecodeToVector3(string value)
-	{
-		var args = value.Split(Delimiter);
-		return new Vector3(float.Parse(args[0]), float.Parse(args[1]), float.Parse(args[2]));
-	}
-
-	Quaternion DecodeToQuaternion(string value)
-	{
-		var args = value.Split(Delimiter);
-		return new Quaternion(float.Parse(args[0]), float.Parse(args[1]), 
-		                      float.Parse(args[2]), float.Parse(args[3]));
-	}
-
-	string Encode(int value) 
-	{
-		return value.ToString();
-	}
-
-	string Encode(float value) 
-	{
-		return value.ToString();
-	}
-
-	string Encode(Vector2 value) 
-	{
-		return value.x.ToString() + "," + value.y.ToString();
-	}
-
-	string Encode(Vector3 value) 
-	{
-		return value.x.ToString() + "," + value.y.ToString() + "," + value.z.ToString();
-	}
-
-	string Encode(Quaternion value) 
-	{
-		return value.x.ToString() + "," + value.y.ToString() + "," + value.z.ToString() + "," + value.w.ToString();
 	}
 }
 
