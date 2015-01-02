@@ -21,11 +21,6 @@ public class Synchronizer : MonoBehaviour
 	static private readonly char[] CommandDelimiter = new char[] {CommandDelimiterChar};
 	static private readonly char[] MessageDelimiter = new char[] {MessageDelimiterChar};
 
-	// Resources 内の Prefab を Instantiate した時に
-	// そのプレファブのパス（e.g. Bullet/Big）を特定するためのマップ
-	private Dictionary<GameObject, string> prefabPathMap_
-		= new Dictionary<GameObject, string>();
-
 	// 指定された ID の GameObject を特定するテーブル
 	private Dictionary<string, GameObject> gameObjectLookup_
 		= new Dictionary<string, GameObject>();
@@ -308,16 +303,6 @@ public class Synchronizer : MonoBehaviour
 			NotifyDead(id);
 		}
 		gameObjectLookup_.Remove(id);
-	}
-
-	public void AddPrefabPathMap(GameObject prefab, string prefabPath)
-	{
-		prefabPathMap_.Add(prefab, prefabPath);
-	}
-
-	public void ClearPrefabPathMap()
-	{
-		prefabPathMap_.Clear();
 	}
 
 	public static void RegisterComponent(string id, SynchronizedComponent component)

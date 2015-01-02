@@ -25,6 +25,7 @@ public class TestController : MonoBehaviour
 	}
 
 	public GameObject bullet;
+	[PrefabResource()]
 	public string emitEffect;
 
 	void Update() 

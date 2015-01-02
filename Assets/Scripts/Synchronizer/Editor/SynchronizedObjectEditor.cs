@@ -20,9 +20,12 @@ public class SynchronizedObjectEditor : Editor
 		var syncObj = target as SynchronizedObject;
 		SynchronizerEditorUtility.ReadOnlyTextField("Sync ID", syncObj.id);
 		if (syncObj.isOverridePrefab) {
-			var prefabPath = EditorGUILayout.TextField("Prefab Path", syncObj.prefabPath);
-			if (prefabPath != syncObj.prefabPath) {
-				syncObj.prefabPath = prefabPath;
+			PrefabResourceWatcher.Update();
+			var index = PrefabResourceWatcher.PathIndexOf(syncObj.prefabPath);
+
+			var selectedIndex = EditorGUILayout.Popup("Prefab Path", index, PrefabResourceWatcher.PathList.ToArray());
+			if (index != selectedIndex) {
+				syncObj.prefabPath = PrefabResourceWatcher.PathList[selectedIndex];
 			}
 		} else {
 			SynchronizerEditorUtility.ReadOnlyTextField("Prefab Path", syncObj.prefabPath);
