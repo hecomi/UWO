@@ -26,7 +26,7 @@ public class TestController : MonoBehaviour
 	}
 
 	public GameObject bullet;
-	[PrefabResource]
+	[ResourcePathAsPopup("prefab")]
 	public string emitEffect;
 
 	void Update() 

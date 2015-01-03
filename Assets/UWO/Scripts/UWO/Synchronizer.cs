@@ -69,6 +69,11 @@ public class Synchronizer : MonoBehaviour
 		server_.OnReceive += OnReceive;
 	}
 
+	void OnDestroy()
+	{
+		server_.OnReceive -= OnReceive;
+	}
+
 	void LateUpdate()
 	{
 		++emitSkipCounter_;
