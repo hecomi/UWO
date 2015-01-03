@@ -1,0 +1,17 @@
+{
+  "name": "UWO-Server",
+  "version": "0.0.1",
+  "description": "UWO (Unity WebGL Online) Server",
+  "main": "server.js",
+  "dependencies": {
+    "underscore": "^1.7.0",
+    "ws": "^0.6.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "hecomi",
+  "license": "MIT"
+}
