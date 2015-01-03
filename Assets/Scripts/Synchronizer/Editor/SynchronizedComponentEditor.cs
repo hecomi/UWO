@@ -2,6 +2,9 @@
 using UnityEditor;
 using System.Collections;
 
+namespace UWO
+{
+
 [CustomEditor(typeof(SynchronizedComponent), true)]
 public class SynchronizedComponentEditor : Editor
 {
@@ -61,4 +64,6 @@ public class SynchronizedComponentEditor : Editor
 			obj.AddComponent<Synchronizer>();
 		}
 	}
+}
+
 }

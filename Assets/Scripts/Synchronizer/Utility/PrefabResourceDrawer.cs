@@ -9,6 +9,9 @@ public class PrefabResourceAttribute : PropertyAttribute
 	public PrefabResourceAttribute() {}
 }
 
+namespace UWO
+{
+
 #if UNITY_EDITOR
 public static class PrefabResourceWatcher
 {
@@ -52,3 +55,5 @@ public class PrefabResourceDrawer : PropertyDrawer
 
 }
 #endif
+
+}

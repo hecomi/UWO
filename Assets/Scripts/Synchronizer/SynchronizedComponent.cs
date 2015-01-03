@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UWO;
+
+namespace UWO
+{
 
 [RequireComponent(typeof(SynchronizedObject))]
 public abstract class SynchronizedComponent: MonoBehaviour
@@ -224,3 +226,4 @@ public abstract class SynchronizedComponent: MonoBehaviour
 	}
 }
 
+}

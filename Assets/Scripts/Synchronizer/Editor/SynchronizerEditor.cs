@@ -2,6 +2,9 @@
 using UnityEditor;
 using System.Collections;
 
+namespace UWO
+{
+
 [CustomEditor(typeof(Synchronizer))]
 public class SynchronizerEditor : Editor
 {
@@ -18,4 +21,6 @@ public class SynchronizerEditor : Editor
 		EditorGUILayout.TextField("Connetions Num", Synchronizer.ConnectionsNum.ToString());
 		EditorUtility.SetDirty(target);
 	}
+}
+
 }

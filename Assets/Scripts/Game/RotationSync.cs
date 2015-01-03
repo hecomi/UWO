@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UWO;
 
 public class RotationSync : SynchronizedComponent
 {

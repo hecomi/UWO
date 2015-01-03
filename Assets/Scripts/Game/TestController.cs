@@ -3,6 +3,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UWO;
 
 [RequireComponent(typeof(SynchronizedObject))]
 public class TestController : MonoBehaviour 
@@ -25,7 +26,7 @@ public class TestController : MonoBehaviour
 	}
 
 	public GameObject bullet;
-	[PrefabResource()]
+	[PrefabResource]
 	public string emitEffect;
 
 	void Update() 

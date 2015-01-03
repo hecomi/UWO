@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using UWO;
+
+namespace UWO
+{
 
 // Synchronizer はローカルとサーバの橋渡しをするクラス
 // 各 GameObject と SynchronizedComponent の管理や、
@@ -357,3 +359,4 @@ public class Synchronizer : MonoBehaviour
 	*/
 }
 
+}

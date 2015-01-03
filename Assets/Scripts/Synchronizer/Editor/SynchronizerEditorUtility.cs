@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
+namespace UWO
+{
+
 public static class SynchronizerEditorUtility
 {
 	public static void AddSynchronizerGameObject()
@@ -28,4 +31,6 @@ public static class SynchronizerEditorUtility
 			EditorGUILayout.SelectableLabel(text, EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
 		} EditorGUILayout.EndHorizontal();
 	}
+}
+
 }

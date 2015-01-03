@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+namespace UWO
+{
+
 public class WebSocketBrowser : MonoBehaviour 
 {
 	private Queue<string> queue_ = new Queue<string>();
@@ -28,4 +31,6 @@ public class WebSocketBrowser : MonoBehaviour
 	{
 		queue_.Enqueue(data);
 	}
+}
+
 }

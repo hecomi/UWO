@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+namespace UWO
+{
+
 public class SynchronizedObject : MonoBehaviour 
 {
 	[HideInInspector]
@@ -62,4 +65,6 @@ public class SynchronizedObject : MonoBehaviour
 	{
 		noMessageElapsedTime_ = 0f;
 	}
+}
+
 }

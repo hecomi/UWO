@@ -3,6 +3,9 @@ using UnityEngine;
 using System;
 using System.Collections;
 
+namespace UWO
+{
+
 public class WebSocketSyncServer : MonoBehaviour 
 {
 	public string websocketServerUrl = "ws://127.0.0.1:3000";
@@ -81,4 +84,6 @@ public class WebSocketSyncServer : MonoBehaviour
 		Debug.LogError(error);
 		Application.ExternalCall("console.error", error);
 	}
+}
+
 }
