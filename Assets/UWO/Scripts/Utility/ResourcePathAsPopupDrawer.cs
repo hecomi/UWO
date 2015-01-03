@@ -24,8 +24,6 @@ public static class ResourcePathWatcher
 	
 	public static void Update(string resourceType)
 	{
-		if (Application.isPlaying) return;
-
 		var resourcesAbsolutePath = System.IO.Path.Combine(Application.dataPath, "Resources");
 		var prefabAbsolutePaths = System.IO.Directory.GetFiles(
 			resourcesAbsolutePath, "*." + resourceType, System.IO.SearchOption.AllDirectories);
