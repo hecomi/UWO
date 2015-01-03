@@ -264,7 +264,7 @@ public class Synchronizer : MonoBehaviour
 			}
 		}
 		if (targetComponent == null) {
-			Debug.LogError(componentName + " does not attached to " + syncObjectId);
+			Debug.LogError(componentName + " is not attached to " + syncObjectId);
 			return null;
 		}
 

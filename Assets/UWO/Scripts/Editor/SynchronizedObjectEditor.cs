@@ -38,7 +38,7 @@ public class SynchronizedObjectEditor : Editor
 	void SetPrefabPath()
 	{
 		var obj = target as SynchronizedObject;
-		if (!Application.isPlaying && !obj.isOverridePrefab) {
+		if (!obj.isOverridePrefab) {
 			var parent = PrefabUtility.GetPrefabParent(obj.gameObject) as GameObject;
 			if (parent == null) {
 				parent = obj.gameObject;
