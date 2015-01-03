@@ -71,7 +71,7 @@ public class TestController : MonoBehaviour
 			Destroy(gameObject);
 		}
 
-		if (Input.GetKeyDown(KeyCode.F)) {
+		if (Input.GetKey(KeyCode.F)) {
 			var forward = Camera.main.transform.forward;
 			var obj = Instantiate(bullet, transform.position + forward, bullet.transform.rotation) as GameObject;
 			obj.GetComponent<Rigidbody>().AddForce(forward * 3000);

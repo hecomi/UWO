@@ -9,6 +9,7 @@ public class SynchronizedObject : MonoBehaviour
 	[HideInInspector]
 	public string id = System.Guid.Empty.ToString();
 	public bool isLocal = true;
+	public bool isSavedToServer = false;
 	public bool isOverridePrefab = false;
 	public bool isTakenOverToMaster = false;
 	public bool isRemote

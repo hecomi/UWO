@@ -36,6 +36,7 @@ public class Synchronizer : MonoBehaviour
 	// 適当なタイミングでサーバに送られる。
 	// 送信後はクリアされる
 	private Dictionary<string, string> updatedComponents_  = new Dictionary<string, string>();
+	private Dictionary<string, string> savedComponents_  = new Dictionary<string, string>();
 	private List<string> deletedGameObjects_ = new List<string>();
 
 	private struct AddedNetworkGameObject
@@ -95,6 +96,14 @@ public class Synchronizer : MonoBehaviour
 			}
 			updatedComponents_.Clear();
 
+			foreach (var savedComponent in savedComponents_) {
+				var componentId = savedComponent.Key;
+				var args = savedComponent.Value;
+				message += "s" + CommandDelimiterChar + componentId
+					+ CommandDelimiterChar + args + MessageDelimiterChar;
+			}
+			savedComponents_.Clear();
+
 			foreach (var id in deletedGameObjects_) {
 				message += "d" + CommandDelimiterChar + id + MessageDelimiterChar;
 			}
@@ -133,8 +142,12 @@ public class Synchronizer : MonoBehaviour
 				case "d":
 					DeleteGameObject(args);
 					break;
+				case "s":
 				case "u":
 					UpdateComponent(args);
+					break;
+				case "o":
+					UpdateComponent(args, true);
 					break;
 				case "i":
 					SetClientInformation(args);
@@ -187,7 +200,7 @@ public class Synchronizer : MonoBehaviour
 		}
 	}
 
-	void UpdateComponent(string[] args)
+	void UpdateComponent(string[] args, bool isBecomeLocalImmediately = false)
 	{
 		if (args.Length < 7) {
 			Debug.LogWarning("Invalid arguments for UpdateComponent");
@@ -204,6 +217,9 @@ public class Synchronizer : MonoBehaviour
 		var component = GetSynchronizedComponent(componentId, componentName, gameObjectId, prefabPath);
 		if (component != null) {
 			component.Receive(value, type);
+			if (isBecomeLocalImmediately) {
+				component.syncObject.isLocal = true;
+			}
 		}
 	}
 
@@ -281,31 +297,40 @@ public class Synchronizer : MonoBehaviour
 		           component.prefabPath    + CommandDelimiterChar +
 		           component.componentName + CommandDelimiterChar +
 		           value + CommandDelimiterChar + type;
-		updatedComponents_[id] = args;
+		if (component.syncObject.isSavedToServer) {
+			savedComponents_[id] = args;
+		} else {
+			updatedComponents_[id] = args;
+		}
 	}
 
 	void NotifyDead(string syncObjectId)
 	{
+		if (deletedGameObjects_.Contains(syncObjectId)) return;
 		deletedGameObjects_.Add(syncObjectId);
 	}
 
 	void RegisterComponentImpl(string id, SynchronizedComponent component)
 	{
+		if (componentLookup_.ContainsKey(id)) return;
 		componentLookup_.Add(id, component);
 	}
 
 	void UnregisterComponentImpl(string id)
 	{
+		if (!componentLookup_.ContainsKey(id)) return;
 		componentLookup_.Remove(id);
 	}
 
 	void RegisterGameObjectImpl(string id, GameObject obj)
 	{
+		if (gameObjectLookup_.ContainsKey(id)) return;
 		gameObjectLookup_.Add(id, obj);
 	}
 
 	void UnregisterGameObjectImpl(string id, bool isLocal)
 	{
+		if (!gameObjectLookup_.ContainsKey(id)) return;
 		if (isLocal) {
 			NotifyDead(id);
 		}
