@@ -16,24 +16,24 @@ public abstract class SynchronizedComponent: MonoBehaviour
 		get { return syncObject_ ?? (syncObject_ = GetComponent<SynchronizedObject>()); }
 	}
 
-	public string syncObjectId 
-	{ 
-		get { return syncObject.id; } 
+	public string syncObjectId
+	{
+		get { return syncObject.id; }
 	}
 
-	public bool isLocal 
-	{ 
-		get { return syncObject.isLocal; } 
+	public bool isLocal
+	{
+		get { return syncObject.isLocal; }
 	}
 
-	public bool isRemote 
-	{ 
-		get { return syncObject.isRemote; } 
+	public bool isRemote
+	{
+		get { return syncObject.isRemote; }
 	}
 
 	public string prefabPath
-	{ 
-		get { return syncObject.prefabPath; } 
+	{
+		get { return syncObject.prefabPath; }
 	}
 
 	public string componentName
@@ -48,7 +48,7 @@ public abstract class SynchronizedComponent: MonoBehaviour
 	public float sendFrequency
 	{
 		get { return 1f / sendFrameRate; }
-	}	
+	}
 	public float easing
 	{
 		get { return sendFrameRate / 60; } // TODO: use actual framerate
@@ -87,8 +87,8 @@ public abstract class SynchronizedComponent: MonoBehaviour
 	IEnumerator Sync()
 	{
 		for (;;) {
-			if (isLocal) { 
-				OnSend(); 
+			if (isLocal) {
+				OnSend();
 			}
 			yield return new WaitForSeconds(sendFrequency);
 		}
@@ -96,7 +96,7 @@ public abstract class SynchronizedComponent: MonoBehaviour
 
 	IEnumerator HeartBeat()
 	{
-		yield return new WaitForEndOfFrame(); 
+		yield return new WaitForEndOfFrame();
 		Synchronizer.Send(this, preValue_, preType_);
 		for (;;) {
 			if (isLocal && !string.IsNullOrEmpty(preValue_) && !string.IsNullOrEmpty(preType_)) {
@@ -144,12 +144,12 @@ public abstract class SynchronizedComponent: MonoBehaviour
 
 	protected void Send(long value)
 	{
-		Send(value.AsString(), "uint");
+		Send(value.AsString(), "long");
 	}
 
 	protected void Send(ulong value)
 	{
-		Send(value.AsString(), "uint");
+		Send(value.AsString(), "ulong");
 	}
 
 	protected void Send(float value)
@@ -172,20 +172,59 @@ public abstract class SynchronizedComponent: MonoBehaviour
 		Send(value.AsString(), "quaternion");
 	}
 
-	protected virtual void OnReceive(string value) {}
-	protected virtual void OnReceive(int value) {}
-	protected virtual void OnReceive(uint value) {}
-	protected virtual void OnReceive(long value) {}
-	protected virtual void OnReceive(ulong value) {}
-	protected virtual void OnReceive(bool value) {}
-	protected virtual void OnReceive(float value) {}
-	protected virtual void OnReceive(Vector2 value) {}
-	protected virtual void OnReceive(Vector3 value) {}
-	protected virtual void OnReceive(Quaternion value) {}
-
-	public void Receive(string value, string type)
+	protected virtual void OnReceive(string value)
 	{
-		if (isLocal) return;
+		Debug.Log("receive string: " + value);
+	}
+
+	protected virtual void OnReceive(int value)
+	{
+		Debug.Log("receive int: " + value.AsString());
+	}
+
+	protected virtual void OnReceive(uint value)
+	{
+		Debug.Log("receive uint: " + value.AsString());
+	}
+
+	protected virtual void OnReceive(long value)
+	{
+		Debug.Log("receive long: " + value.AsString());
+	}
+
+	protected virtual void OnReceive(ulong value)
+	{
+		Debug.Log("receive ulong: " + value.AsString());
+	}
+
+	protected virtual void OnReceive(bool value)
+	{
+		Debug.Log("receive bool: " + value.AsString());
+	}
+
+	protected virtual void OnReceive(float value)
+	{
+		Debug.Log("receive float: " + value.AsString());
+	}
+
+	protected virtual void OnReceive(Vector2 value)
+	{
+		Debug.Log("receive vector2: " + value.AsString());
+	}
+
+	protected virtual void OnReceive(Vector3 value)
+	{
+		Debug.Log("receive vector3: " + value.AsString());
+	}
+
+	protected virtual void OnReceive(Quaternion value)
+	{
+		Debug.Log("receive quaternion: " + value.AsString());
+	}
+
+	public void Receive(string value, string type, bool isForceUpdate = false)
+	{
+		if (isLocal && !isForceUpdate) return;
 		syncObject.NotifyAlive();
 
 		switch (type) {

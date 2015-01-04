@@ -12,7 +12,8 @@ public class TestController : MonoBehaviour
 	{
 		FireBullet,
 		CreateBlock,
-		DeleteBlock
+		DeleteBlock,
+		ChangeBlockColor,
 	}
 	public FireMode fireMode;
 
@@ -48,6 +49,7 @@ public class TestController : MonoBehaviour
 
 	private GameObject previousSelectedObject_;
 	private Material previousSelectedMaterial_;
+	private Color previousSelectedColor_;
 	public Material deleteTargetMaterial;
 
 	void Start()
@@ -77,6 +79,9 @@ public class TestController : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3)) {
 			fireMode = FireMode.DeleteBlock;
 		}
+		if (Input.GetKeyDown(KeyCode.Keypad4) || Input.GetKeyDown(KeyCode.Alpha4)) {
+			fireMode = FireMode.ChangeBlockColor;
+		}
 
 		switch (fireMode) {
 			case FireMode.FireBullet: 
@@ -87,6 +92,9 @@ public class TestController : MonoBehaviour
 				break;
 			case FireMode.DeleteBlock: 
 				GlobalGUI.SetTool("-BLOCK");
+				break;
+			case FireMode.ChangeBlockColor:
+				GlobalGUI.SetTool("COLOR");
 				break;
 		}
 	}
@@ -138,6 +146,9 @@ public class TestController : MonoBehaviour
 			case FireMode.DeleteBlock:
 				DeleteBlock(isClick); 
 				break;
+			case FireMode.ChangeBlockColor:
+				ChangeBlockColor(isClick); 
+				break;
 		}
 		FirePostProcess();
 	}
@@ -163,6 +174,11 @@ public class TestController : MonoBehaviour
 		if (previousSelectedObject_) {
 			previousSelectedObject_.GetComponent<Renderer>().material = previousSelectedMaterial_;
 		}
+
+		// Reset ChangeBlockColor
+		if (previousSelectedObject_) {
+			previousSelectedObject_.GetComponent<Renderer>().material.color = previousSelectedColor_;
+		}
 	}
 
 	void FirePostProcess()
@@ -187,11 +203,16 @@ public class TestController : MonoBehaviour
 		--fireCoolDownCount_;
 	}
 
+	bool ScreenPointToAddableLayer(out RaycastHit hit)
+	{
+		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		return Physics.Raycast(ray, out hit, 10f, blockAddableLayer);
+	}
+
 	void CreateBlock(bool isClick)
 	{
 		RaycastHit hit;
-		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		if (Physics.Raycast(ray, out hit, 10f, blockAddableLayer)) {
+		if (ScreenPointToAddableLayer(out hit)) {
 			var distance = Vector3.Distance(transform.position, hit.point);
 			if (distance < 3f) {
 				var point = hit.point + hit.normal * 0.5f;
@@ -214,10 +235,9 @@ public class TestController : MonoBehaviour
 	void DeleteBlock(bool isClick)
 	{
 		RaycastHit hit;
-		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		if (Physics.Raycast(ray, out hit, 10f, blockAddableLayer)) {
+		if (ScreenPointToAddableLayer(out hit)) {
 			var distance = Vector3.Distance(transform.position, hit.point);
-			if (distance < 3f && hit.transform.tag == "Deletable") {
+			if (distance < 3f && hit.transform.tag == "Block") {
 				previousSelectedObject_ = hit.transform.gameObject;
 				previousSelectedMaterial_ = hit.transform.GetComponent<Renderer>().material;
 				hit.transform.GetComponent<Renderer>().material = deleteTargetMaterial;
@@ -226,6 +246,27 @@ public class TestController : MonoBehaviour
 					Synchronizer.Destroy(previousSelectedObject_);
 					previousSelectedObject_ = null;
 					Score.Add(10);
+				}
+			}
+		}
+	}
+
+	void ChangeBlockColor(bool isClick) 
+	{
+		RaycastHit hit;
+		if (ScreenPointToAddableLayer(out hit)) {
+			var distance = Vector3.Distance(transform.position, hit.point);
+			if (distance < 3f && hit.transform.tag == "Block") {
+				previousSelectedObject_ = hit.transform.gameObject;
+				var mat = hit.transform.GetComponent<Renderer>().material;
+				previousSelectedColor_ = mat.color;
+				var colorSetter = hit.transform.GetComponent<ChangeBlockColorAndSync>();
+				mat.color = colorSetter.GetNextColor(); 
+
+				if (isClick) {
+					colorSetter.SetNextColor();
+					previousSelectedObject_ = null;
+					Score.Add(50);
 				}
 			}
 		}

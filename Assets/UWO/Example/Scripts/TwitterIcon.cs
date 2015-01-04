@@ -4,6 +4,8 @@ using System.Collections;
 
 public class TwitterIcon : MonoBehaviour 
 {
+	private const float retryTime = 5f;
+
 	private string iconUrl_;
 	public string iconUrl
 	{
@@ -26,6 +28,12 @@ public class TwitterIcon : MonoBehaviour
 	{
 		var www = new WWW(iconUrl);
 		yield return www;
-		GetComponent<RawImage>().texture = www.texture;
+		if (www.error != null) {
+			Debug.LogWarning(www.error);
+			yield return new WaitForSeconds(retryTime);
+			StartCoroutine(LoadImage(iconUrl));
+		} else {
+			GetComponent<RawImage>().texture = www.texture;
+		}
 	}
 }

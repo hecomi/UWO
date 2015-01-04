@@ -218,7 +218,8 @@ public class Synchronizer : MonoBehaviour
 
 		var component = GetSynchronizedComponent(componentId, componentName, gameObjectId, prefabPath);
 		if (component != null) {
-			component.Receive(value, type);
+			var isForceUpdate = isBecomeLocalImmediately;
+			component.Receive(value, type, isForceUpdate);
 			if (isBecomeLocalImmediately) {
 				component.syncObject.isLocal = true;
 			}
