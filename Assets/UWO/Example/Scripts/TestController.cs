@@ -223,7 +223,7 @@ public class TestController : MonoBehaviour
 				hit.transform.GetComponent<Renderer>().material = deleteTargetMaterial;
 
 				if (isClick) {
-					Destroy(previousSelectedObject_);
+					Synchronizer.Destroy(previousSelectedObject_);
 					previousSelectedObject_ = null;
 					Score.Add(10);
 				}

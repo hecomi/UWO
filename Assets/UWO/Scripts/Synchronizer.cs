@@ -370,25 +370,30 @@ public class Synchronizer : MonoBehaviour
 
 	public static void Instantiate(string prefabPath, Vector3 position, Quaternion rotation)
 	{
-		var addedNetworkGameObject = new AddedNetworkGameObject() {
-			prefabPath = prefabPath,
-			position   = position,
-			rotation   = rotation
-		};
-		Instance.addedNetworkGameObjects_.Add(addedNetworkGameObject);
+		var target = Resources.Load<GameObject>(prefabPath);
+		// Synchronized GameObject:
+		if (target.GetComponent<SynchronizedObject>()) {
+			Instantiate(target, position, rotation);
+		// Not Synchronized GameObject
+		} else {
+			var addedNetworkGameObject = new AddedNetworkGameObject() {
+				prefabPath = prefabPath,
+				position   = position,
+				rotation   = rotation
+			};
+			Instance.addedNetworkGameObjects_.Add(addedNetworkGameObject);
+		}
 	}
 
-	/*
-	public static void Instantiate(GameObject gameObject, Vector3 position, Quaternion rotation)
+	public static void Destroy(GameObject target)
 	{
-		// NOTE: not work ... always go into this if.
-		if (!Instance.prefabPathMap_.ContainsKey(gameObject)) {
-			Debug.LogError(gameObject.name + " is not registered to Synchronizer prefab path map.");
+		var syncObj = target.GetComponent<SynchronizedObject>();
+		if (!syncObj) {
+			Debug.LogWarning(target.name + " is not synchronized object.");
+			return;
 		}
-		var prefabPath = Instance.prefabPathMap_[gameObject];
-		Instantiate(prefabPath, position, rotation);
+		Instance.NotifyDead(syncObj.id);
 	}
-	*/
 }
 
 }
