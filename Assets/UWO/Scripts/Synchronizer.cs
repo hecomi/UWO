@@ -166,6 +166,8 @@ public class Synchronizer : MonoBehaviour
 		IsMaster = args[1].AsBool();
 		Timestamp = args[2].AsUlong();
 		ConnectionsNum = args[3].AsInt();
+
+		GlobalGUI.SetNum(ConnectionsNum.ToString());
 	}
 
 	void AddNetworkGameObject(string[] args)

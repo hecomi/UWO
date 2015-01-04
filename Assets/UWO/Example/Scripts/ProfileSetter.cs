@@ -6,10 +6,11 @@ using UWO;
 public class ProfileSetter : SynchronizedComponent
 {
 	public Text idUi;
-	public RawImage imageUi;
+	public TwitterIcon twitterIcon;
 	public Text messageUi;
-	private string iconUrl_ = "";
+	public Text scoreUi;
 
+	#region FROM_WEB
 	void SetId(string id)
 	{
 		idUi.text = id;
@@ -17,27 +18,18 @@ public class ProfileSetter : SynchronizedComponent
 
 	void SetIconUrl(string iconUrl)
 	{
-		if (iconUrl_ != iconUrl && !string.IsNullOrEmpty(iconUrl)) {
-			iconUrl_ = iconUrl;
-			StartCoroutine(LoadImage(iconUrl));
-		}
+		twitterIcon.iconUrl = iconUrl;
 	}
 
 	void SetMessage(string message)
 	{
 		messageUi.text = message;
 	}
-
-	IEnumerator LoadImage(string iconUrl)
-	{
-		var www = new WWW(iconUrl);
-		yield return www;
-		imageUi.texture = www.texture;
-	}
+	#endregion
 
 	protected override void OnSend()
 	{
-		var profiles = idUi.text + "," + iconUrl_ + "," + messageUi.text;
+		var profiles = idUi.text + "," + twitterIcon.iconUrl + "," + messageUi.text + "," + scoreUi.text;
 		Send(profiles);
 	}
 
@@ -47,6 +39,7 @@ public class ProfileSetter : SynchronizedComponent
 		SetId(args[0]);
 		SetIconUrl(args[1]);
 		SetMessage(args[2]);
+		scoreUi.text = args[3];
 	}
 
 	[ContextMenu("Test")]

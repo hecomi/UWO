@@ -33,7 +33,6 @@ server.on('connection', function(socket) {
 
 	var isImmediatelyOwned = clientNum === 0;
 	server.sendSavedComponentsTo(socket, isImmediatelyOwned);
-	console.log(isImmediatelyOwned, clientNum, this.clients.length);
 	clientNum = server.clients.length;
 
 	socket.on('message', function(message) {
