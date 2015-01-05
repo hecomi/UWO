@@ -49,12 +49,18 @@ public class TestController : MonoBehaviour
 
 	private GameObject previousSelectedObject_;
 	private Material previousSelectedMaterial_;
-	private Color previousSelectedColor_;
 	public Material deleteTargetMaterial;
 
-	void Start()
-	{
-	}
+	public GameObject changeBlockColorTarget;
+
+	[ResourcePathAsPopup("prefab")]
+	public string changeBlockColorEffect;
+
+	public int aquirePointPerFrame = 1;
+	public int fireConsumePoint = 10;
+	public int createBlockConsumePoint = 300;
+	public int deleteBlockConsumePoint = 100;
+	public int  changeBlockColorConsumePoint = 200;
 
 	void Update() 
 	{
@@ -66,6 +72,9 @@ public class TestController : MonoBehaviour
 		Rotate();
 		Jump();
 		Fire();
+
+		var altitudeBonus = Mathf.FloorToInt((transform.position.y + 4.5f) / 12f);
+		Score.Add(aquirePointPerFrame + altitudeBonus);
 	}
 
 	void ChangeMode()
@@ -129,6 +138,9 @@ public class TestController : MonoBehaviour
 		if (isGround_ && Input.GetKeyDown(KeyCode.Space)) {
 			isGround_ = false;
 			rigidbody.AddForce(Vector3.up * jumpForce);
+			var player = GameObject.FindGameObjectWithTag("Player");
+			var position = player != null ? player.transform.position : Vector3.zero;
+			SoundManager.Play("Jump", position);
 		}
 	}
 
@@ -176,9 +188,7 @@ public class TestController : MonoBehaviour
 		}
 
 		// Reset ChangeBlockColor
-		if (previousSelectedObject_) {
-			previousSelectedObject_.GetComponent<Renderer>().material.color = previousSelectedColor_;
-		}
+		changeBlockColorTarget.SetActive(false);
 	}
 
 	void FirePostProcess()
@@ -188,13 +198,20 @@ public class TestController : MonoBehaviour
 	void FireBullet(bool isFire)
 	{
 		if (Input.GetKey(KeyCode.F) || isFire) {
-			if (fireCoolDownCount_ <= 0) {
+			if (fireCoolDownCount_ <= 0 && Score.CanUse(fireConsumePoint)) {
 				fireCoolDownCount_ = fireCoolDownFrame;
-				var forward = Camera.main.transform.forward;
-				var obj = Instantiate(bullet, transform.position + forward, bullet.transform.rotation) as GameObject;
-				obj.GetComponent<Rigidbody>().AddForce(forward * 3000);
+
+				var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				var direction = ray.direction;
+				RaycastHit hit;
+				if (Physics.Raycast(ray, out hit, Mathf.Infinity)) {
+					direction = (hit.point - transform.position).normalized;
+				}
+				var obj = Instantiate(bullet, transform.position + direction, bullet.transform.rotation) as GameObject;
+				obj.GetComponent<Rigidbody>().AddForce(direction * 3000);
 				Synchronizer.Instantiate(emitEffect, obj.transform.position, obj.transform.rotation);
-				Score.Add(5);
+				Score.Sub(fireConsumePoint);
+				SoundManager.Play("FireBullet", obj.transform.position);
 			}
 		}
 		if (Input.GetKeyUp(KeyCode.F)) {
@@ -214,7 +231,7 @@ public class TestController : MonoBehaviour
 		RaycastHit hit;
 		if (ScreenPointToAddableLayer(out hit)) {
 			var distance = Vector3.Distance(transform.position, hit.point);
-			if (distance < 3f) {
+			if (distance < 5f) {
 				var point = hit.point + hit.normal * 0.5f;
 				point.x = Mathf.Floor(point.x + 0.5f);
 				point.y = Mathf.Floor(point.y + 0.5f);
@@ -224,8 +241,13 @@ public class TestController : MonoBehaviour
 					blockTarget.transform.position = point;
 					blockTarget.SetActive(true);
 					if (isClick) {
-						Synchronizer.Instantiate(block, point, Quaternion.identity); 
-						Score.Add(100);
+						if (Score.CanUse(createBlockConsumePoint)) {
+							Synchronizer.Instantiate(block, point, Quaternion.identity); 
+							Score.Sub(createBlockConsumePoint);
+							SoundManager.Play("CreateBlock", point);
+						} else {
+							Notification.Show("More point is needed to create a block...");
+						}
 					}
 				}
 			}
@@ -237,15 +259,20 @@ public class TestController : MonoBehaviour
 		RaycastHit hit;
 		if (ScreenPointToAddableLayer(out hit)) {
 			var distance = Vector3.Distance(transform.position, hit.point);
-			if (distance < 3f && hit.transform.tag == "Block") {
+			if (distance < 5f && hit.transform.tag == "Block") {
 				previousSelectedObject_ = hit.transform.gameObject;
 				previousSelectedMaterial_ = hit.transform.GetComponent<Renderer>().material;
 				hit.transform.GetComponent<Renderer>().material = deleteTargetMaterial;
 
 				if (isClick) {
-					Synchronizer.Destroy(previousSelectedObject_);
-					previousSelectedObject_ = null;
-					Score.Add(10);
+					if (Score.CanUse(deleteBlockConsumePoint)) {
+						Synchronizer.Destroy(previousSelectedObject_);
+						previousSelectedObject_ = null;
+						Score.Sub(deleteBlockConsumePoint);
+						SoundManager.Play("DeleteBlock", hit.transform.position);
+					} else {
+						Notification.Show("More point is needed to delete a block...");
+					}
 				}
 			}
 		}
@@ -256,17 +283,22 @@ public class TestController : MonoBehaviour
 		RaycastHit hit;
 		if (ScreenPointToAddableLayer(out hit)) {
 			var distance = Vector3.Distance(transform.position, hit.point);
-			if (distance < 3f && hit.transform.tag == "Block") {
-				previousSelectedObject_ = hit.transform.gameObject;
-				var mat = hit.transform.GetComponent<Renderer>().material;
-				previousSelectedColor_ = mat.color;
+			if (distance < 5f && hit.transform.tag == "Block") {
 				var colorSetter = hit.transform.GetComponent<ChangeBlockColorAndSync>();
-				mat.color = colorSetter.GetNextColor(); 
+				changeBlockColorTarget.transform.position = hit.transform.position;
+				changeBlockColorTarget.SetActive(true);
+				changeBlockColorTarget.SendMessage("ChangeColor", colorSetter.GetNextColor());
 
 				if (isClick) {
-					colorSetter.SetNextColor();
-					previousSelectedObject_ = null;
-					Score.Add(50);
+					if (Score.CanUse(changeBlockColorConsumePoint)) {
+						Synchronizer.Instantiate(changeBlockColorEffect, hit.transform.position, hit.transform.rotation);
+						colorSetter.SetNextColor();
+						previousSelectedObject_ = null;
+						Score.Sub(changeBlockColorConsumePoint);
+						SoundManager.Play("ChangeBlockColor", hit.transform.position);
+					} else {
+						Notification.Show("More point is needed to change the block color...");
+					}
 				}
 			}
 		}

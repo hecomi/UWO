@@ -22,7 +22,7 @@ public class SynchronizedComponentEditor : Editor
 		originalInspectorFoldout = EditorGUILayout.Foldout(originalInspectorFoldout, "Snychronized Component");
 		if (originalInspectorFoldout) {
 			EditorGUI.indentLevel++;
-			DrawOriginalInspector();
+			DrawExtraInspector();
 			EditorGUI.indentLevel--;
 		}
 
@@ -42,7 +42,7 @@ public class SynchronizedComponentEditor : Editor
 		SynchronizerEditorUtility.ReadOnlyTextField("Component ID", component.id);
 	}
 
-	void DrawOriginalInspector()
+	void DrawExtraInspector()
 	{
 		var component = target as SynchronizedComponent;
 
@@ -55,14 +55,9 @@ public class SynchronizedComponentEditor : Editor
 		if (sendFrameRate != component.sendFrameRate) {
 			component.sendFrameRate = sendFrameRate;
 		}
-	}
-
-	void AddSynchronizerGameObject()
-	{
-		if (GameObject.FindObjectOfType<Synchronizer>() == null) {
-			var obj = new GameObject("Synchronizer");
-			obj.AddComponent<Synchronizer>();
-		}
+		
+		// to avoid resetting HideInspector-ed serialized parameters
+		EditorUtility.SetDirty(component);
 	}
 }
 

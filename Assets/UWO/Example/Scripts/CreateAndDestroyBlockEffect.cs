@@ -4,18 +4,24 @@ using UWO;
 
 public class CreateAndDestroyBlockEffect : MonoBehaviour 
 {
-	[ResourcePathAsPopup("prefab")]
-	public string createEffect;
-	[ResourcePathAsPopup("prefab")]
-	public string destroyEffect;
+	public GameObject createEffect;
+	public GameObject destroyEffect;
+	private bool isAppRunning_ = true;
 
 	void Start() 
 	{
-		Synchronizer.Instantiate(createEffect, transform.position, transform.rotation);
+		Instantiate(createEffect, transform.position, transform.rotation);
 	}
 
 	void OnDestroy()
 	{
-		Synchronizer.Instantiate(destroyEffect, transform.position, transform.rotation);
+		if (isAppRunning_) {
+			Instantiate(destroyEffect, transform.position, transform.rotation);
+		}
+	}
+
+	void OnApplicationQuit()
+	{
+		isAppRunning_ = false;
 	}
 }

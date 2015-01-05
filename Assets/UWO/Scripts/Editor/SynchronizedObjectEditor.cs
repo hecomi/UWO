@@ -13,12 +13,12 @@ public class SynchronizedObjectEditor : Editor
 		SetPrefabPath();
 		SynchronizerEditorUtility.AddSynchronizerGameObject();
 
-		DrawOriginalInspector();
+		DrawExtraInspector();
 		SynchronizerEditorUtility.DrawHorizontalLine(10f);
 		DrawDefaultInspector();
 	}
 
-	void DrawOriginalInspector()
+	void DrawExtraInspector()
 	{
 		var syncObj = target as SynchronizedObject;
 		SynchronizerEditorUtility.ReadOnlyTextField("Sync ID", syncObj.id);

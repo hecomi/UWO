@@ -5,6 +5,8 @@ using System.Collections;
 public class TwitterIcon : MonoBehaviour 
 {
 	private const float retryTime = 5f;
+	public delegate void ChangeEvent(Texture texture);
+	public event ChangeEvent onChange = texture => {};
 
 	private string iconUrl_;
 	public string iconUrl
@@ -34,6 +36,7 @@ public class TwitterIcon : MonoBehaviour
 			StartCoroutine(LoadImage(iconUrl));
 		} else {
 			GetComponent<RawImage>().texture = www.texture;
+			onChange(www.texture);
 		}
 	}
 }

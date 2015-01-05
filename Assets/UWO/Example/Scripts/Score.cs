@@ -10,6 +10,10 @@ public static class Score
 		private set { point_ = value; }
 	}
 
+	public static bool CanUse(int val) {
+		return point >= val;
+	}
+
 	public static void Add(int val) {
 		point += val;
 	}
