@@ -31,11 +31,11 @@ public class ChangeBlockColorAndSync : SynchronizedComponent
 	{
 		index_ = index % colors.Length;
 		GetComponent<Renderer>().material.color = colors[index_];
+		Send(index_);
 	}
 
 	protected override void OnSend()
 	{
-		Send(index_);
 	}
 
 	protected override void OnReceive(int index)

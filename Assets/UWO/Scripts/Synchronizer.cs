@@ -54,6 +54,8 @@ public class Synchronizer : MonoBehaviour
 	// WebSocket サーバ
 	private WebSocketSyncServer server_;
 
+	private List<string> cachedCommands_ = new List<string>();
+
 	void Awake()
 	{
 		if (Instance != null) {
@@ -68,6 +70,14 @@ public class Synchronizer : MonoBehaviour
 	{
 		server_ = GetComponent<WebSocketSyncServer>();
 		server_.OnReceive += OnReceive;
+	}
+
+	void Update()
+	{
+		ProcessCachedCommands(10);
+		if (Time.frameCount > 600 && cachedCommands_.Count > 5000) {
+			ProcessCachedCommands(cachedCommands_.Count);
+		}
 	}
 
 	void OnDestroy()
@@ -125,9 +135,15 @@ public class Synchronizer : MonoBehaviour
 
 	void OnReceive(string message)
 	{
-		var commands = message.Split(MessageDelimiter);
+		cachedCommands_.AddRange(message.Split(MessageDelimiter).ToList());
+		ProcessCachedCommands(100);
+	}
 
-		foreach (var command in commands) {
+	void ProcessCachedCommands(int maxCommand)
+	{
+		int n = 0;
+		for (int i = 0; i < maxCommand && i < cachedCommands_.Count; ++i, ++n) {
+			var command = cachedCommands_[i];
 			if (string.IsNullOrEmpty(command)) {
 				continue;
 			}
@@ -154,6 +170,7 @@ public class Synchronizer : MonoBehaviour
 					break;
 			}
 		}
+		cachedCommands_.RemoveRange(0, n);
 	}
 
 	void SetClientInformation(string[] args)
