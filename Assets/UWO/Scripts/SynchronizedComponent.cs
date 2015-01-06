@@ -54,8 +54,8 @@ public abstract class SynchronizedComponent: MonoBehaviour
 		get { return sendFrameRate / 60; } // TODO: use actual framerate
 	}
 
-	private string preValue_;
-	private string preType_;
+	private string preValue_ = null;
+	private string preType_ = null;
 
 	void Awake()
 	{
