@@ -27,29 +27,35 @@ server.sendSavedComponentsTo = function(socket, isImmediatelyOwned) {
 	socket.send(messages);
 };
 
-var clientNum = 0;
-server.on('connection', function(socket) {
-	console.log('connected');
+synchronizer.loadGameObjects(function() {
+	var clientNum = 0;
+	server.on('connection', function(socket) {
+		console.log('connected');
 
-	var isImmediatelyOwned = clientNum === 0;
-	server.sendSavedComponentsTo(socket, isImmediatelyOwned);
-	clientNum = server.clients.length;
-
-	socket.on('message', function(message) {
-		synchronizer.add(message);
-	});
-
-	socket.on('close', function() {
-		console.log('disconnected...');
+		var isImmediatelyOwned = clientNum === 0;
+		server.sendSavedComponentsTo(socket, isImmediatelyOwned);
 		clientNum = server.clients.length;
-	});
 
-	setInterval(function() {
-		if (synchronizer.hasMessages()) {
-			server.broadcast(synchronizer.getMessages());
-		}
-	}, 1000 / fps);
+		socket.on('message', function(message) {
+			synchronizer.add(message);
+		});
+
+		socket.on('close', function() {
+			console.log('disconnected...');
+			clientNum = server.clients.length;
+		});
+
+		setInterval(function() {
+			if (synchronizer.hasMessages()) {
+				server.broadcast(synchronizer.getMessages());
+			}
+		}, 1000 / fps);
+	});
 });
+
+setInterval(function() {
+	synchronizer.saveGameObjects();
+}, 1000 * 60);
 
 process.on('uncaughtException', function(e) {
 	console.error("Unexpected Exception:", e.stack);

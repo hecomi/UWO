@@ -1,8 +1,26 @@
 var GameObject = require('./gameObject');
+var fs = require('fs');
+var savedDataPath = './saved-data.txt';
 
-module.exports = {
+var Synchronizer = {
 	_messages: [],
-	_savedGameObjects: {},
+	_saveComponentGameObjects: {},
+	loadGameObjects: function(callback) {
+		var self = this;
+		fs.readFile(savedDataPath, function(err, body) {
+			body.toString().split('\n').forEach(function(line) {
+				self._saveComponent(line);
+			});
+			if (typeof callback === 'function') callback();
+		});
+	},
+	saveGameObjects: function() {
+		var messages = this.getSavedComponentsMessages();
+		fs.writeFile(savedDataPath, messages, function(err) {
+			if (err) console.error(err);
+			console.log('saved!');
+		});
+	},
 	hasMessages: function() {
 		return this._messages.length > 0;
 	},
@@ -21,8 +39,8 @@ module.exports = {
 	},
 	getSavedComponentsMessages: function(isImmediatelyOwned) {
 		var messages = '';
-		for (var id in this._savedGameObjects) {
-			var gameObject = this._savedGameObjects[id];
+		for (var id in this._saveComponentGameObjects) {
+			var gameObject = this._saveComponentGameObjects[id];
 			var components = gameObject.components;
 			for (var id in components) {
 				var updateComponentMessage = components[id];
@@ -39,23 +57,25 @@ module.exports = {
 		message.split('\n').forEach(function(line) {
 			var command = line[0];
 			switch (command) {
-				case 's': self._save(line);   break;
-				case 'd': self._delete(line); break;
+				case 's': self._saveComponent(line);   break;
+				case 'd': self._deleteComponent(line); break;
 			}
 		});
 	},
-	_save: function(line) {
+	_saveComponent: function(line) {
 		var gameObject = new GameObject(line);
 		var id = gameObject.id;
-		if (id in this._savedGameObjects) {
-			this._savedGameObjects[id].merge(gameObject.components);
+		if (id in this._saveComponentGameObjects) {
+			this._saveComponentGameObjects[id].merge(gameObject.components);
 		} else {
-			this._savedGameObjects[id] = gameObject;
+			this._saveComponentGameObjects[id] = gameObject;
 		}
 	},
-	_delete: function(line) {
+	_deleteComponent: function(line) {
 		var args = line.split('\t');
 		var gameObjectId = args[1];
-		delete this._savedGameObjects[gameObjectId];
+		delete this._saveComponentGameObjects[gameObjectId];
 	}
 };
+
+module.exports = Synchronizer;
