@@ -10,6 +10,9 @@ public abstract class SynchronizedComponent: MonoBehaviour
 	[HideInInspector]
 	public string id = System.Guid.Empty.ToString();
 
+	[HideInInspector]
+	public bool isAlsoReceiveOnLocal = false;
+
 	private SynchronizedObject syncObject_;
 	public SynchronizedObject syncObject
 	{
@@ -111,7 +114,7 @@ public abstract class SynchronizedComponent: MonoBehaviour
 		Synchronizer.UnregisterComponent(id);
 	}
 
-	protected abstract void OnSend();
+	protected virtual void OnSend() {}
 
 	protected void Send(string value, string type)
 	{
@@ -224,7 +227,7 @@ public abstract class SynchronizedComponent: MonoBehaviour
 
 	public void Receive(string value, string type, bool isForceUpdate = false)
 	{
-		if (isLocal && !isForceUpdate) return;
+		if (isLocal && !isForceUpdate && !isAlsoReceiveOnLocal) return;
 		syncObject.NotifyAlive();
 
 		switch (type) {

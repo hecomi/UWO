@@ -16,6 +16,7 @@ public class SynchronizedComponentEditor : Editor
 		SynchronizerEditorUtility.AddSynchronizerGameObject();
 
 		DrawComponentId();
+		DrawComponentProperties();
 
 		SynchronizerEditorUtility.DrawHorizontalLine(10f);
 
@@ -40,6 +41,15 @@ public class SynchronizedComponentEditor : Editor
 	{
 		var component = target as SynchronizedComponent;
 		SynchronizerEditorUtility.ReadOnlyTextField("Component ID", component.id);
+	}
+
+	void DrawComponentProperties()
+	{
+		var component = target as SynchronizedComponent;
+		var isAlsoReceiveOnLocal = EditorGUILayout.Toggle("Is Also Receive On Local", component.isAlsoReceiveOnLocal);
+		if (isAlsoReceiveOnLocal != component.isAlsoReceiveOnLocal) {
+			component.isAlsoReceiveOnLocal = isAlsoReceiveOnLocal;
+		}
 	}
 
 	void DrawExtraInspector()

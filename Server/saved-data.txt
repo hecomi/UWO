@@ -1,7 +1,7 @@
 s	134aabb0-c7da-4cd4-a4e0-c69594ce467c	ba8783b4-a480-4d9d-b65e-316a2aa69bf7	Example/Prefabs/Block	PositionSync	1,-4,0	vector3
-s	d897b341-a088-4478-838c-ce75415fc741	ba8783b4-a480-4d9d-b65e-316a2aa69bf7	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
+s	d897b341-a088-4478-838c-ce75415fc741	ba8783b4-a480-4d9d-b65e-316a2aa69bf7	Example/Prefabs/Block	ChangeBlockColorAndSync	1	int
 s	accd18c7-553a-4b6e-b8b6-e4e46ee73fbb	193b70d8-4679-4730-99d8-3a1a47d273f8	Example/Prefabs/Block	PositionSync	1,-4,1	vector3
-s	c9f9276b-e12f-46e6-8bf3-6e77228a4b31	193b70d8-4679-4730-99d8-3a1a47d273f8	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
+s	c9f9276b-e12f-46e6-8bf3-6e77228a4b31	193b70d8-4679-4730-99d8-3a1a47d273f8	Example/Prefabs/Block	ChangeBlockColorAndSync	4	int
 s	7fcaa001-98fe-4b2f-af31-a762452d823e	ae2baf3b-8903-49f5-af9c-3d62c6f7770d	Example/Prefabs/Block	PositionSync	1,-4,-1	vector3
 s	8c86ca41-3c7f-4002-b313-db9ceef7fe6d	ae2baf3b-8903-49f5-af9c-3d62c6f7770d	Example/Prefabs/Block	ChangeBlockColorAndSync	2	int
 s	e3c90c25-c4ef-4484-ae3d-ea8f1c875485	d80869ea-335e-4f9d-a3e3-898ae07b53aa	Example/Prefabs/Block	PositionSync	0,-4,1	vector3
@@ -93,9 +93,9 @@ s	351ce965-abef-478f-9473-6a4a0f023667	b2952fd4-10b1-49b1-a494-58d78e087af2	Exam
 s	4cbae959-01b1-4e87-896d-432c3a13aa8e	d1d4506d-2341-4dc7-b417-d4ca2caf1e5b	Example/Prefabs/Block	PositionSync	13,2,7	vector3
 s	841a309b-af41-43c5-9a93-0f17b5a2e624	d1d4506d-2341-4dc7-b417-d4ca2caf1e5b	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
 s	25ec9957-f00f-4e9b-8aee-81920f9e9abb	8af1070d-f87d-408a-b983-55623150ee4a	Example/Prefabs/Block	PositionSync	4,-4,8	vector3
-s	a06fb905-181e-477e-a179-39752d77b244	8af1070d-f87d-408a-b983-55623150ee4a	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
+s	a06fb905-181e-477e-a179-39752d77b244	8af1070d-f87d-408a-b983-55623150ee4a	Example/Prefabs/Block	ChangeBlockColorAndSync	4	int
 s	59fd15ff-b397-4ec0-bde7-17dc9ec38abc	31ba214c-5f35-41d4-8d59-46cff5c2694d	Example/Prefabs/Block	PositionSync	4,-3,8	vector3
-s	32b83245-d03f-48b7-9e4b-bc423849912f	31ba214c-5f35-41d4-8d59-46cff5c2694d	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
+s	32b83245-d03f-48b7-9e4b-bc423849912f	31ba214c-5f35-41d4-8d59-46cff5c2694d	Example/Prefabs/Block	ChangeBlockColorAndSync	1	int
 s	92d9f138-5bc8-4528-9818-506e10cb398e	94848ddd-5ee3-44d5-b3df-879d7fc66dc6	Example/Prefabs/Block	PositionSync	12,2,7	vector3
 s	5a0962f3-d03a-418e-adcd-b100acd86da5	94848ddd-5ee3-44d5-b3df-879d7fc66dc6	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
 s	48c73e11-bc17-4798-9540-93859e613741	99afbc04-430b-4549-8445-dab7e155d61a	Example/Prefabs/Block	PositionSync	12,3,7	vector3
@@ -113,7 +113,7 @@ s	a6536c09-b5cc-48ab-88d1-21adaab2e528	80273e31-b625-4a1a-82fc-3ed4471c827d	Exam
 s	7bd397ac-7f9c-4b5f-bd90-c7752c627c6d	56968b9b-b5f4-4c18-99b5-ef330256bfa6	Example/Prefabs/Block	PositionSync	13,7,6	vector3
 s	14814658-ddf5-4dd6-92f7-5193982a5b7f	56968b9b-b5f4-4c18-99b5-ef330256bfa6	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
 s	6c767827-027f-4070-becc-c6b50bd56e83	43ead346-1d99-42d6-a17c-2b09ff9e9e3c	Example/Prefabs/Block	PositionSync	7,-4,3	vector3
-s	575fb191-e509-47f8-9a81-82a8c3e8a5f0	43ead346-1d99-42d6-a17c-2b09ff9e9e3c	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
+s	575fb191-e509-47f8-9a81-82a8c3e8a5f0	43ead346-1d99-42d6-a17c-2b09ff9e9e3c	Example/Prefabs/Block	ChangeBlockColorAndSync	2	int
 s	6239c24b-f4ac-41b4-b149-cd063a97f1e0	229175fe-e3de-4d53-90c6-04c49b1b2762	Example/Prefabs/Block	PositionSync	1,-4,-5	vector3
 s	bd496359-a151-4db5-8b0c-9fac6dc6101b	229175fe-e3de-4d53-90c6-04c49b1b2762	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
 s	44b888eb-ba5d-4df8-b569-1a15841828d3	9088216f-a1ff-48c9-86b6-af24c4691e78	Example/Prefabs/Block	PositionSync	1,-3,-5	vector3
@@ -205,21 +205,21 @@ s	28e73baa-af0f-497b-b77d-9be3bf11bc9c	1655f9bb-842b-4144-8ab7-d76f973c522a	Exam
 s	1a27cb0e-f18a-4ff8-8500-de0e879f0a9e	35e18295-caf3-4e26-ac63-73a8fb1363cc	Example/Prefabs/Block	PositionSync	12,3,-16	vector3
 s	f4dd9311-daab-4481-a498-91cc658ccb86	35e18295-caf3-4e26-ac63-73a8fb1363cc	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
 s	1e65d11a-5c98-4b44-842a-70095cb61781	d2c4a18f-ae6c-41b8-8b00-30918a33addc	Example/Prefabs/Block	PositionSync	7,-3,3	vector3
-s	a0941897-0df9-4e0f-bd8c-d8a9eefcf23a	d2c4a18f-ae6c-41b8-8b00-30918a33addc	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
+s	a0941897-0df9-4e0f-bd8c-d8a9eefcf23a	d2c4a18f-ae6c-41b8-8b00-30918a33addc	Example/Prefabs/Block	ChangeBlockColorAndSync	2	int
 s	dc0e050c-1424-4f14-97ad-dbcb11b6398b	9fe4d48c-d05c-4c07-890c-933e23a3e669	Example/Prefabs/Block	PositionSync	1,7,-9	vector3
 s	96ec6f9e-64d4-4034-9d3f-588448d9c567	9fe4d48c-d05c-4c07-890c-933e23a3e669	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
 s	0327021e-4b45-486e-895b-81c5921ba660	820be0b9-14f1-4504-9896-dac922916406	Example/Prefabs/Block	PositionSync	1,7,-10	vector3
 s	3f05702f-371c-4638-9287-06fa9ac25e1a	820be0b9-14f1-4504-9896-dac922916406	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
 s	1be9d260-829a-43cb-8553-fd8e0eaffce5	c4a253c2-6f74-416b-8cbf-e4399398ad33	Example/Prefabs/Block	PositionSync	6,-4,3	vector3
-s	aabec66e-cf93-4133-8379-cc36924b5108	c4a253c2-6f74-416b-8cbf-e4399398ad33	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
+s	aabec66e-cf93-4133-8379-cc36924b5108	c4a253c2-6f74-416b-8cbf-e4399398ad33	Example/Prefabs/Block	ChangeBlockColorAndSync	1	int
 s	187d9a1a-6cf3-4c6b-b064-5416e12ef0e4	650b5207-1ba8-4df9-af80-3f609b66bd6f	Example/Prefabs/Block	PositionSync	5,-4,3	vector3
-s	f0b8e1ca-f42c-4efa-b73a-ce39c8aa461e	650b5207-1ba8-4df9-af80-3f609b66bd6f	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
+s	f0b8e1ca-f42c-4efa-b73a-ce39c8aa461e	650b5207-1ba8-4df9-af80-3f609b66bd6f	Example/Prefabs/Block	ChangeBlockColorAndSync	1	int
 s	d4e4e9dd-473c-4d0b-8c82-df92d9541900	4e3e67f2-1475-44c0-9e93-e9c65b55bd40	Example/Prefabs/Block	PositionSync	4,-4,3	vector3
-s	88807ce3-f61e-487b-9e0c-f2d4269850f2	4e3e67f2-1475-44c0-9e93-e9c65b55bd40	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
+s	88807ce3-f61e-487b-9e0c-f2d4269850f2	4e3e67f2-1475-44c0-9e93-e9c65b55bd40	Example/Prefabs/Block	ChangeBlockColorAndSync	4	int
 s	128877cd-34af-4fef-9875-4047ecc49afe	961fd6df-59de-47bc-ac04-b7c34c3ae2ee	Example/Prefabs/Block	PositionSync	-9,-4,10	vector3
 s	e372f140-6430-43b8-8c3e-f57111ed65b9	961fd6df-59de-47bc-ac04-b7c34c3ae2ee	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
 s	60f7c4bd-ec4a-4c51-b69e-906ff99d27ab	42c6dc6e-b85b-43b8-80ef-2110ca8b1693	Example/Prefabs/Block	PositionSync	4,-3,3	vector3
-s	81942da5-f4b4-4737-b46a-2259abc3705c	42c6dc6e-b85b-43b8-80ef-2110ca8b1693	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
+s	81942da5-f4b4-4737-b46a-2259abc3705c	42c6dc6e-b85b-43b8-80ef-2110ca8b1693	Example/Prefabs/Block	ChangeBlockColorAndSync	2	int
 s	9280887c-3517-4294-8eec-dcd3cd5d8749	507b4983-5f6c-4d4c-999d-7e6052ff7d2d	Example/Prefabs/Block	PositionSync	-9,-4,9	vector3
 s	5d70c3ba-be83-4295-843b-de1ba1fa3479	507b4983-5f6c-4d4c-999d-7e6052ff7d2d	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
 s	55a173e8-1208-46b9-8557-53535c7f54be	ea213098-ab87-411b-98ab-d80cb1902ed3	Example/Prefabs/Block	PositionSync	-9,-3,9	vector3
@@ -3101,7 +3101,7 @@ s	ba5d22eb-d6f0-4569-aa1b-568c1c40f4c9	99902f5a-7f52-4cc4-97df-8c2333709821	Exam
 s	eb45a104-1d31-4608-a033-e5070e34744a	00358ba5-9f1a-444d-9f84-316ac1e253e9	Example/Prefabs/Block	PositionSync	-52,28,-12	vector3
 s	f79254bd-cc1b-4a04-95ef-8d1ce3156319	00358ba5-9f1a-444d-9f84-316ac1e253e9	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
 s	c460e98d-6ff1-435a-9e3a-0af8e8ca51e3	a0fa94e8-9112-455f-aa1b-34d956647574	Example/Prefabs/Block	PositionSync	5,-3,9	vector3
-s	8da90b2b-3eff-41cf-ba96-5b59edb54e7b	a0fa94e8-9112-455f-aa1b-34d956647574	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
+s	8da90b2b-3eff-41cf-ba96-5b59edb54e7b	a0fa94e8-9112-455f-aa1b-34d956647574	Example/Prefabs/Block	ChangeBlockColorAndSync	1	int
 s	642e9a6e-f7db-494d-91fc-7b1b1b50de58	4a787d16-28d1-4865-8e4b-adf6311545ea	Example/Prefabs/Block	PositionSync	-52,27,-13	vector3
 s	e1821090-3baa-487b-802c-13c35cca4108	4a787d16-28d1-4865-8e4b-adf6311545ea	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
 s	fdee364f-5b9c-4780-bdfb-8f62cb314f4b	88dad779-b70a-41ef-abaf-3486a5e56872	Example/Prefabs/Block	PositionSync	1,29,-21	vector3
@@ -4487,7 +4487,7 @@ s	675e00e9-9ce9-4594-a571-4c00fd7608ae	b406025c-e0ed-4def-9fc4-3f24bad38be6	Exam
 s	6ac74c02-a33a-4e94-a1e9-dd4bd5f43faf	55a28847-3644-43ec-a26d-c0fb5b792ab1	Example/Prefabs/Block	PositionSync	-49,29,-16	vector3
 s	46598f8e-db93-4254-b66a-4832e9690241	55a28847-3644-43ec-a26d-c0fb5b792ab1	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
 s	5ea5acc7-bf62-4110-9cc9-cfd3404f996e	4c55c0a0-4638-46c2-9114-e0ac421bb974	Example/Prefabs/Block	PositionSync	6,-4,12	vector3
-s	cc37e2ab-457b-40bf-875f-09ba8d606a58	4c55c0a0-4638-46c2-9114-e0ac421bb974	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
+s	cc37e2ab-457b-40bf-875f-09ba8d606a58	4c55c0a0-4638-46c2-9114-e0ac421bb974	Example/Prefabs/Block	ChangeBlockColorAndSync	1	int
 s	ac411ea7-f13e-47e4-b9f2-b579479179de	69c5bc6e-09e9-449b-9650-fa9f42fe36d0	Example/Prefabs/Block	PositionSync	29,29,-15	vector3
 s	acde8e55-a674-4aa0-999c-3d96d719b483	69c5bc6e-09e9-449b-9650-fa9f42fe36d0	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
 s	aa8315fc-d194-4d32-b3c3-d3423011e185	2c5026be-8fcf-4bc4-8581-63f485b7c575	Example/Prefabs/Block	PositionSync	30,29,-15	vector3
@@ -21529,3 +21529,5 @@ s	ef514a53-cc1e-4f80-a93b-73200ce92f01	53e40cb0-0b4f-4b2b-ab46-929d90e1f1f6	Exam
 s	00000000-0000-0000-0000-000000000000	53e40cb0-0b4f-4b2b-ab46-929d90e1f1f6	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
 s	69d241c3-adb8-47ae-a3d7-748f6a8c2f71	44678e59-e7d9-4c10-a31b-35649855ef64	Example/Prefabs/Block	PositionSync	0,-3,0	vector3
 s	00000000-0000-0000-0000-000000000000	44678e59-e7d9-4c10-a31b-35649855ef64	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
+s	e697ac17-f0d7-4b36-81e6-9dccf4c60904	dd1e1d08-2202-482c-816d-c8e814781df1	Example/Prefabs/Block	PositionSync	1,-3,0	vector3
+s	00000000-0000-0000-0000-000000000000	dd1e1d08-2202-482c-816d-c8e814781df1	Example/Prefabs/Block	ChangeBlockColorAndSync		

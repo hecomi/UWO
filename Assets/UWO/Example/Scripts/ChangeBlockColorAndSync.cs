@@ -64,11 +64,6 @@ public class ChangeBlockColorAndSync : SynchronizedComponent
 		Send(index_);
 	}
 
-	protected override void OnSend()
-	{
-		Send(index_);
-	}
-
 	protected override void OnReceive(int index)
 	{
 		ChangeColor(index);
