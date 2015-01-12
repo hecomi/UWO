@@ -16,8 +16,8 @@ s	15e778a3-e6fb-4041-9872-b5fe6e45e427	b5f54399-22bb-4609-9d36-bf747d5ce151	Exam
 s	fb881f0a-19da-43e1-99a0-017a0b401649	b5f54399-22bb-4609-9d36-bf747d5ce151	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
 s	3ed8c53f-2bb0-4145-9d23-01f0b09e90b7	86681d5a-1586-42b4-9abb-24ad4809a7e6	Example/Prefabs/Block	PositionSync	-1,-4,-1	vector3
 s	f9f227f5-65d2-40ee-9a41-cfe19a44c48f	86681d5a-1586-42b4-9abb-24ad4809a7e6	Example/Prefabs/Block	ChangeBlockColorAndSync	2	int
-s	60d3ccff-0534-4e15-af4e-74d79b4f9183	bcc7f875-36b8-40aa-abff-5b490d736c65	Example/Prefabs/Block	PositionSync	-8,-4,-1	vector3
-s	fa34d3fd-c856-4cd6-83b9-bfcc3f4bb6a5	bcc7f875-36b8-40aa-abff-5b490d736c65	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
+s	60d3ccff-0534-4e15-af4e-74d79b4f9183	bcc7f875-36b8-40aa-abff-5b490d736c65		PositionSync	-8,-4,-1	vector3
+s	fa34d3fd-c856-4cd6-83b9-bfcc3f4bb6a5	bcc7f875-36b8-40aa-abff-5b490d736c65		ChangeBlockColorAndSync	0	int
 s	b3c80c9d-6984-48a6-92d3-fa361d74bf33	924adc66-6b15-4e54-9a46-94ecae249674	Example/Prefabs/Block	PositionSync	-8,-3,-1	vector3
 s	4cd0706a-6642-408f-906a-8c2aa9d6a95b	924adc66-6b15-4e54-9a46-94ecae249674	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
 s	801381af-133c-4554-bd8b-ba37fa755db9	ccb4c30f-3db5-47f2-b7ba-cdb3c3fda146	Example/Prefabs/Block	PositionSync	-8,-2,-1	vector3
@@ -21525,3 +21525,7 @@ s	d622fdb6-1697-47bc-8b6f-b9fc239e6c30	792be1f6-c9c6-400c-8ebe-b653cfa1903e	Exam
 s	d0cb9313-ddc9-4087-aa5c-d0ed45b27660	e9144807-23a0-468e-87d0-58d81c1c9536	Example/Prefabs/Block	PositionSync	-37,3,-1	vector3
 s	f52c3024-caa6-481b-be1f-f17b1f77427b	e9144807-23a0-468e-87d0-58d81c1c9536	Example/Prefabs/Block	ChangeBlockColorAndSync	3	int
 
+s	ef514a53-cc1e-4f80-a93b-73200ce92f01	53e40cb0-0b4f-4b2b-ab46-929d90e1f1f6	Example/Prefabs/Block	PositionSync	-1,-4,1	vector3
+s	00000000-0000-0000-0000-000000000000	53e40cb0-0b4f-4b2b-ab46-929d90e1f1f6	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int
+s	69d241c3-adb8-47ae-a3d7-748f6a8c2f71	44678e59-e7d9-4c10-a31b-35649855ef64	Example/Prefabs/Block	PositionSync	0,-3,0	vector3
+s	00000000-0000-0000-0000-000000000000	44678e59-e7d9-4c10-a31b-35649855ef64	Example/Prefabs/Block	ChangeBlockColorAndSync	0	int

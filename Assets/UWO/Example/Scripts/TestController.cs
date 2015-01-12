@@ -62,6 +62,11 @@ public class TestController : MonoBehaviour
 	public int deleteBlockConsumePoint = 100;
 	public int  changeBlockColorConsumePoint = 200;
 
+	[ResourcePathAsPopup("prefab")]
+	public string createEffect;
+	[ResourcePathAsPopup("prefab")]
+	public string destroyEffect;
+
 	void Update() 
 	{
 		if (!isMainPlayer) return;
@@ -243,6 +248,7 @@ public class TestController : MonoBehaviour
 					if (isClick) {
 						if (Score.CanUse(createBlockConsumePoint)) {
 							Synchronizer.Instantiate(block, point, Quaternion.identity); 
+							Synchronizer.Instantiate(createEffect, point, Quaternion.identity);
 							Score.Sub(createBlockConsumePoint);
 							SoundManager.Play("CreateBlock", point);
 						} else {
@@ -266,6 +272,8 @@ public class TestController : MonoBehaviour
 
 				if (isClick) {
 					if (Score.CanUse(deleteBlockConsumePoint)) {
+						var t = previousSelectedObject_.transform;
+						Synchronizer.Instantiate(destroyEffect, t.position, t.rotation);
 						Synchronizer.Destroy(previousSelectedObject_);
 						previousSelectedObject_ = null;
 						Score.Sub(deleteBlockConsumePoint);

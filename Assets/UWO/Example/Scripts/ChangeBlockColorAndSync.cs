@@ -1,11 +1,40 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿#pragma warning disable 108
+using UnityEngine;
+using System.Collections.Generic;
 using UWO;
 
 public class ChangeBlockColorAndSync : SynchronizedComponent
 {
 	public Color[] colors;
+	static private ChangeBlockColorAndSync Instance;
+	static private Dictionary<int, Material> Materials = new Dictionary<int, Material>();
 	private int index_ = 0;
+
+	private Renderer renderer
+	{
+		get { return GetComponent<Renderer>(); }
+	}
+
+	static private Material GetCachedMaterial(int index) 
+	{
+		if (index < 0 || index > Instance.colors.Length) {
+			Debug.LogWarning("Invalid material index " + index);
+			return null;
+		}
+		if (!Materials.ContainsKey(index)) {
+			var mat = new Material(Instance.renderer.material);
+			mat.color = Instance.colors[index];
+			Materials.Add(index, mat);
+		}
+		return Materials[index];
+	}
+
+	public void Awake()
+	{
+		if (Instance == null) {
+			Instance = this;
+		}
+	}
 
 	public void SetPrevColor()
 	{
@@ -30,7 +59,8 @@ public class ChangeBlockColorAndSync : SynchronizedComponent
 	void ChangeColor(int index)
 	{
 		index_ = index % colors.Length;
-		GetComponent<Renderer>().material.color = colors[index_];
+		//renderer.material.color = colors[index_];
+		renderer.material = GetCachedMaterial(index);
 		Send(index_);
 	}
 
