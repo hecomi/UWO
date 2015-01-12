@@ -36,6 +36,7 @@ public class ChangeBlockColorAndSync : SynchronizedComponent
 
 	protected override void OnSend()
 	{
+		Send(index_);
 	}
 
 	protected override void OnReceive(int index)
