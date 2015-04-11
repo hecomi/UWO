@@ -1,7 +1,7 @@
 var ws           = require('ws').Server;
 var server       = new ws({ port: 3000 });
 var synchronizer = require('./synchronizer');
-var fps          = 30;
+var fps          = 60;
 
 var getInfo = function(index, clientNum) {
 	var command   = 'i';
@@ -37,6 +37,7 @@ synchronizer.loadGameObjects(function() {
 		clientNum = server.clients.length;
 
 		socket.on('message', function(message) {
+			console.log(message.toString());
 			synchronizer.add(message);
 		});
 

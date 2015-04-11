@@ -4,10 +4,11 @@ var savedDataPath = './saved-data.txt';
 
 var Synchronizer = {
 	_messages: [],
-	_saveComponentGameObjects: {},
+	_savedGameObjects: {},
 	loadGameObjects: function(callback) {
 		var self = this;
 		fs.readFile(savedDataPath, function(err, body) {
+			if (err) throw err;
 			body.toString().split('\n').forEach(function(line) {
 				self._saveComponent(line);
 			});
@@ -39,8 +40,8 @@ var Synchronizer = {
 	},
 	getSavedComponentsMessages: function(isImmediatelyOwned) {
 		var messages = '';
-		for (var id in this._saveComponentGameObjects) {
-			var gameObject = this._saveComponentGameObjects[id];
+		for (var id in this._savedGameObjects) {
+			var gameObject = this._savedGameObjects[id];
 			var components = gameObject.components;
 			for (var id in components) {
 				var updateComponentMessage = components[id];
@@ -65,16 +66,16 @@ var Synchronizer = {
 	_saveComponent: function(line) {
 		var gameObject = new GameObject(line);
 		var id = gameObject.id;
-		if (id in this._saveComponentGameObjects) {
-			this._saveComponentGameObjects[id].merge(gameObject.components);
+		if (id in this._savedGameObjects) {
+			this._savedGameObjects[id].merge(gameObject.components);
 		} else {
-			this._saveComponentGameObjects[id] = gameObject;
+			this._savedGameObjects[id] = gameObject;
 		}
 	},
 	_deleteComponent: function(line) {
 		var args = line.split('\t');
 		var gameObjectId = args[1];
-		delete this._saveComponentGameObjects[gameObjectId];
+		delete this._savedGameObjects[gameObjectId];
 	}
 };
 
