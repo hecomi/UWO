@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace UWO
 {
@@ -11,7 +12,7 @@ public abstract class SynchronizedComponent: MonoBehaviour
 	public string id = System.Guid.Empty.ToString();
 
 	[HideInInspector]
-	public bool isAlsoReceiveOnLocal = false;
+	public bool isReceiveOnLocal = false;
 
 	private SynchronizedObject syncObject_;
 	public SynchronizedObject syncObject
@@ -48,70 +49,66 @@ public abstract class SynchronizedComponent: MonoBehaviour
 	public float heartBeatDuration = 1f;
 	[HideInInspector]
 	public float sendFrameRate = 30f;
-	public float sendFrequency
+	public float sendCycle
 	{
 		get { return 1f / sendFrameRate; }
 	}
-	public float easing
-	{
-		get { return sendFrameRate / 60; } // TODO: use actual framerate
-	}
+	private float elapsedTimeFromLastSend_ = 0f;
 
 	private string preValue_ = null;
 	private string preType_ = null;
 
-	void Awake()
+	protected virtual void OnInitialize() {}
+
+	protected virtual void Awake()
 	{
 		id = System.Guid.NewGuid().ToString();
 	}
 
-	void Start()
+	protected virtual void Start()
 	{
+		OnInitialize();
 		if (isLocal) {
 			Synchronizer.RegisterComponent(id, this);
-			StartCoroutine(Sync());
 			StartCoroutine(HeartBeat());
 			OnSend();
 		}
 	}
 
+	protected virtual void OnFinalize() {}
+
+	protected virtual void OnDestroy()
+	{
+		Synchronizer.UnregisterComponent(id);
+		OnFinalize();
+	}
+
 	protected virtual void OnLocalUpdate()  {}
 	protected virtual void OnRemoteUpdate() {}
 
-	void Update()
+	protected virtual void Update()
 	{
 		if (isLocal) {
 			OnLocalUpdate();
+			elapsedTimeFromLastSend_ += Time.deltaTime;
+			if (elapsedTimeFromLastSend_ + 0.005f > sendCycle) {
+				OnSend();
+				elapsedTimeFromLastSend_ = 0;
+			}
 		} else {
 			OnRemoteUpdate();
-		}
-	}
-
-	IEnumerator Sync()
-	{
-		for (;;) {
-			if (isLocal) {
-				OnSend();
-			}
-			yield return new WaitForSeconds(sendFrequency);
 		}
 	}
 
 	IEnumerator HeartBeat()
 	{
 		yield return new WaitForEndOfFrame();
-		Synchronizer.Send(this, preValue_, preType_);
 		for (;;) {
 			if (isLocal && !string.IsNullOrEmpty(preValue_) && !string.IsNullOrEmpty(preType_)) {
 				Synchronizer.Send(this, preValue_, preType_);
 			}
 			yield return new WaitForSeconds(heartBeatDuration);
 		}
-	}
-
-	void OnDestroy()
-	{
-		Synchronizer.UnregisterComponent(id);
 	}
 
 	protected virtual void OnSend() {}
@@ -127,7 +124,7 @@ public abstract class SynchronizedComponent: MonoBehaviour
 
 	protected void Send(string value)
 	{
-		Send(value, "string");
+		Send(value.ToEncodedString(), "string");
 	}
 
 	protected void Send(bool value)
@@ -173,6 +170,11 @@ public abstract class SynchronizedComponent: MonoBehaviour
 	protected void Send(Quaternion value)
 	{
 		Send(value.AsString(), "quaternion");
+	}
+
+	protected void Send(MultiValue value)
+	{
+		Send(value.AsString(), "multi");
 	}
 
 	protected virtual void OnReceive(string value)
@@ -225,14 +227,19 @@ public abstract class SynchronizedComponent: MonoBehaviour
 		Debug.Log("receive quaternion: " + value.AsString());
 	}
 
+	protected virtual void OnReceive(MultiValue value)
+	{
+		Debug.Log("receive multi value: " + value.AsString());
+	}
+
 	public void Receive(string value, string type, bool isForceUpdate = false)
 	{
-		if (isLocal && !isForceUpdate && !isAlsoReceiveOnLocal) return;
+		if (isLocal && !isForceUpdate && !isReceiveOnLocal) return;
 		syncObject.NotifyAlive();
 
 		switch (type) {
 			case "string":
-				OnReceive(value);
+				OnReceive(value.ToDecodedString());
 				break;
 			case "int":
 				OnReceive(value.AsInt());
@@ -261,8 +268,11 @@ public abstract class SynchronizedComponent: MonoBehaviour
 			case "quaternion":
 				OnReceive(value.AsQuaternion());
 				break;
+			case "multi":
+				OnReceive(value.AsMultiValue());
+				break;
 			default:
-				Debug.LogWarning("typeof(" + type + ") is invalid type for the value of: " + value);
+				Debug.LogWarning("'" + type + "' is invalid type for the value of: " + value);
 				break;
 		}
 	}

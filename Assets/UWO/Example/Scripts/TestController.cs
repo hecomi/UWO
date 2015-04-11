@@ -185,7 +185,9 @@ public class TestController : MonoBehaviour
 	void FirePreProcess()
 	{
 		// Reset CreateBlock
-		blockTarget.SetActive(false);
+		if (blockTarget) {
+			blockTarget.SetActive(false);
+		}
 
 		// Reset DeleteBlock
 		if (previousSelectedObject_) {
@@ -193,7 +195,9 @@ public class TestController : MonoBehaviour
 		}
 
 		// Reset ChangeBlockColor
-		changeBlockColorTarget.SetActive(false);
+		if (changeBlockColorTarget) {
+			changeBlockColorTarget.SetActive(false);
+		}
 	}
 
 	void FirePostProcess()

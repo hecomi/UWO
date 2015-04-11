@@ -23,6 +23,6 @@ public class RotationSync : SynchronizedComponent
 
 	protected override void OnRemoteUpdate()
 	{
-		transform.rotation = Quaternion.Lerp(transform.rotation, to_, easing);
+		transform.rotation = Quaternion.Lerp(transform.rotation, to_, sendFrameRate / 60);
 	}
 }

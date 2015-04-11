@@ -16,7 +16,6 @@ public class SynchronizedComponentEditor : Editor
 		SynchronizerEditorUtility.AddSynchronizerGameObject();
 
 		DrawComponentId();
-		DrawComponentProperties();
 
 		SynchronizerEditorUtility.DrawHorizontalLine(10f);
 
@@ -43,18 +42,14 @@ public class SynchronizedComponentEditor : Editor
 		SynchronizerEditorUtility.ReadOnlyTextField("Component ID", component.id);
 	}
 
-	void DrawComponentProperties()
-	{
-		var component = target as SynchronizedComponent;
-		var isAlsoReceiveOnLocal = EditorGUILayout.Toggle("Is Also Receive On Local", component.isAlsoReceiveOnLocal);
-		if (isAlsoReceiveOnLocal != component.isAlsoReceiveOnLocal) {
-			component.isAlsoReceiveOnLocal = isAlsoReceiveOnLocal;
-		}
-	}
-
 	void DrawExtraInspector()
 	{
 		var component = target as SynchronizedComponent;
+
+		var isReceiveOnLocal = EditorGUILayout.Toggle("Is Receive On Local", component.isReceiveOnLocal);
+		if (isReceiveOnLocal != component.isReceiveOnLocal) {
+			component.isReceiveOnLocal = isReceiveOnLocal;
+		}
 
 		var heartBeatDuration = EditorGUILayout.FloatField("HeartBeat (sec)", component.heartBeatDuration);
 		if (heartBeatDuration != component.heartBeatDuration) {
@@ -65,8 +60,8 @@ public class SynchronizedComponentEditor : Editor
 		if (sendFrameRate != component.sendFrameRate) {
 			component.sendFrameRate = sendFrameRate;
 		}
-		
-		// to avoid resetting HideInspector-ed serialized parameters
+
+		// to avoid resetting HideInspector serialized parameters
 		EditorUtility.SetDirty(component);
 	}
 }

@@ -14,14 +14,26 @@ namespace UWO
 public class Synchronizer : MonoBehaviour
 {
 	public static Synchronizer Instance { get; set; }
-	public static bool IsMaster = false;
-	public static ulong Timestamp = 0;
-	public static int ConnectionsNum = 0;
 
-	private const char CommandDelimiterChar = '\t';
-	private const char MessageDelimiterChar = '\n';
-	static private readonly char[] CommandDelimiter = new char[] {CommandDelimiterChar};
-	static private readonly char[] MessageDelimiter = new char[] {MessageDelimiterChar};
+	[Tooltip("サーバから自動的に指定されるマスターかどうかのフラグ")]
+	public static bool IsMaster = false;
+	[Tooltip("タイムスタンプ")]
+	public static ulong Timestamp = 0;
+	[Tooltip("サーバに接続しているクライアント数")]
+	public static int ConnectionsNum = 0;
+	[Tooltip("どれくらいの頻度でサーバと通信するか")]
+	public int syncFps = 60;
+
+	public float syncCycle
+	{
+		get { return 1f / syncFps; }
+	}
+	private float elapsedTimeFromLastSync_ = 0f;
+
+	public static readonly char CommandDelimiterChar = '\t';
+	public static readonly char MessageDelimiterChar = '\n';
+	private static readonly char[] CommandDelimiter = new char[] {CommandDelimiterChar};
+	private static readonly char[] MessageDelimiter = new char[] {MessageDelimiterChar};
 
 	// 指定された ID の GameObject を特定するテーブル
 	private Dictionary<string, GameObject> gameObjectLookup_
@@ -32,8 +44,8 @@ public class Synchronizer : MonoBehaviour
 		= new Dictionary<string, SynchronizedComponent>();
 
 	// サーバに送信するデータ
-	// 適宜色々な Component から Send() 経由で情報を詰められ、
-	// 適当なタイミングでサーバに送られる。
+	// 適宜色々な Component から SynchronizedComponent.Send() 経由で情報を詰められ、
+	// 適当なタイミングで Emit() でサーバに送られる。
 	// 送信後はクリアされる
 	private Dictionary<string, string> updatedComponents_  = new Dictionary<string, string>();
 	private Dictionary<string, string> savedComponents_  = new Dictionary<string, string>();
@@ -47,13 +59,10 @@ public class Synchronizer : MonoBehaviour
 	}
 	private List<AddedNetworkGameObject> addedNetworkGameObjects_ = new List<AddedNetworkGameObject>();
 
-	// どれくらいの頻度でサーバと通信するか
-	public int emitSkipCount = 0;
-	private int emitSkipCounter_ = 0;
-
 	// WebSocket サーバ
 	private WebSocketSyncServer server_;
 
+	// 大量のメッセージを受信した場合はキャッシュしておいて順次実行する
 	private List<string> cachedCommands_ = new List<string>();
 
 	void Awake()
@@ -87,9 +96,9 @@ public class Synchronizer : MonoBehaviour
 
 	void LateUpdate()
 	{
-		++emitSkipCounter_;
-		if (emitSkipCounter_ > emitSkipCount) {
-			emitSkipCounter_ = 0;
+		elapsedTimeFromLastSync_ += Time.deltaTime;
+		if (elapsedTimeFromLastSync_ + 0.001f > syncCycle) {
+			elapsedTimeFromLastSync_ = 0;
 			Emit();
 		}
 	}
@@ -98,14 +107,17 @@ public class Synchronizer : MonoBehaviour
 	{
 		if (server_.isConnected) {
 			var message = "";
-			foreach (var updateComponent in updatedComponents_) {
-				var componentId = updateComponent.Key;
-				var args = updateComponent.Value;
+
+			// 更新のみ行うコンポーネント
+			foreach (var updatedComponent in updatedComponents_) {
+				var componentId = updatedComponent.Key;
+				var args = updatedComponent.Value;
 				message += "u" + CommandDelimiterChar + componentId
 					+ CommandDelimiterChar + args + MessageDelimiterChar;
 			}
 			updatedComponents_.Clear();
 
+			// サーバに保存されるコンポーネント
 			foreach (var savedComponent in savedComponents_) {
 				var componentId = savedComponent.Key;
 				var args = savedComponent.Value;
@@ -114,15 +126,17 @@ public class Synchronizer : MonoBehaviour
 			}
 			savedComponents_.Clear();
 
+			// 削除するゲームオブジェクト
 			foreach (var id in deletedGameObjects_) {
 				message += "d" + CommandDelimiterChar + id + MessageDelimiterChar;
 			}
 			deletedGameObjects_.Clear();
 
+			// 新たに追加されるゲームオブジェクト
 			foreach (var obj in addedNetworkGameObjects_) {
 				message += "a" + CommandDelimiterChar +
-					obj.prefabPath + CommandDelimiterChar + 
-					obj.position.AsString() + CommandDelimiterChar + 
+					obj.prefabPath + CommandDelimiterChar +
+					obj.position.AsString() + CommandDelimiterChar +
 					obj.rotation.AsString() + MessageDelimiterChar;
 			}
 			addedNetworkGameObjects_.Clear();
@@ -162,18 +176,18 @@ public class Synchronizer : MonoBehaviour
 				case "u":
 					UpdateComponent(args);
 					break;
-				case "o":
+				case "o": // 最初に接続してきたクライアントが保存されたデータを所有
 					UpdateComponent(args, true);
 					break;
 				case "i":
-					SetClientInformation(args);
+					UpdateClientInformation(args);
 					break;
 			}
 		}
 		cachedCommands_.RemoveRange(0, n);
 	}
 
-	void SetClientInformation(string[] args)
+	void UpdateClientInformation(string[] args)
 	{
 		if (args.Length < 4) {
 			Debug.LogWarning("Invalid arguments for SetMaster");
@@ -222,7 +236,7 @@ public class Synchronizer : MonoBehaviour
 	void UpdateComponent(string[] args, bool isBecomeLocalImmediately = false)
 	{
 		if (args.Length < 7) {
-			Debug.LogWarning("Invalid arguments for UpdateComponent");
+			Debug.LogWarning("Invalid arguments for UpdateComponent: " + string.Join("  ", args));
 			return;
 		}
 
@@ -237,8 +251,9 @@ public class Synchronizer : MonoBehaviour
 		if (component != null) {
 			var isForceUpdate = isBecomeLocalImmediately;
 			if (type == "") {
-					Debug.Log(string.Join("  ", new string[] {componentId, gameObjectId, prefabPath, componentName, value, type}));
-				}
+				Debug.Log("No type specified: " + string.Join("  ", args));
+				return;
+			}
 			component.Receive(value, type, isForceUpdate);
 			if (isBecomeLocalImmediately) {
 				component.syncObject.isLocal = true;
@@ -264,7 +279,10 @@ public class Synchronizer : MonoBehaviour
 			return null;
 		}
 		var gameObj = Instantiate(prefab) as GameObject;
-		var synchronizedObj = gameObj.GetComponent<SynchronizedObject>() ?? gameObj.AddComponent<SynchronizedObject>();
+		var synchronizedObj = 
+			gameObj.GetComponent<SynchronizedObject>() ?? 
+			gameObj.AddComponent<SynchronizedObject>();
+		gameObj.transform.position = Vector3.one * 999999f;
 		synchronizedObj.id = id;
 		synchronizedObj.isRemote = true;
 		synchronizedObj.prefabPath = prefabPath;
@@ -315,6 +333,12 @@ public class Synchronizer : MonoBehaviour
 
 	void SendImpl(SynchronizedComponent component, string value, string type)
 	{
+		if (string.IsNullOrEmpty(type)) {
+			Debug.LogWarningFormat(
+				"type is not specified:\n  {0}: \"{1}\"", 
+				component.componentName, value);
+			return;
+		}
 		var id = component.id;
 		var args = component.syncObjectId  + CommandDelimiterChar +
 		           component.prefabPath    + CommandDelimiterChar +
@@ -392,7 +416,7 @@ public class Synchronizer : MonoBehaviour
 	public static void Instantiate(string prefabPath, Vector3 position, Quaternion rotation)
 	{
 		var target = Resources.Load<GameObject>(prefabPath);
-		// Synchronized GameObject:
+		// Synchronized GameObject
 		if (target.GetComponent<SynchronizedObject>()) {
 			Instantiate(target, position, rotation);
 		// Not Synchronized GameObject

@@ -29,7 +29,7 @@ public class ChangeBlockColorAndSync : SynchronizedComponent
 		return Materials[index];
 	}
 
-	public void Awake()
+	protected override void OnInitialize()
 	{
 		if (Instance == null) {
 			Instance = this;

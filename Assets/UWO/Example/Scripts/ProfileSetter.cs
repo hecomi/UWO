@@ -29,17 +29,21 @@ public class ProfileSetter : SynchronizedComponent
 
 	protected override void OnSend()
 	{
-		var profiles = idUi.text + "," + twitterIcon.iconUrl + "," + messageUi.text + "," + scoreUi.text;
-		Send(profiles);
+		var values = new MultiValue();
+		Debug.Log (values.AsString());
+		values.Push(idUi.text);
+		values.Push(twitterIcon.iconUrl);
+		values.Push(messageUi.text);
+		values.Push(scoreUi.text);
+		Send(values);
 	}
 
-	protected override void OnReceive(string value)
+	protected override void OnReceive(MultiValue values)
 	{
-		var args = value.Split(new char[] {','});
-		SetId(args[0]);
-		SetIconUrl(args[1]);
-		SetMessage(args[2]);
-		scoreUi.text = args[3];
+		SetId(values.PopValue());
+		SetIconUrl(values.PopValue());
+		SetMessage(values.PopValue());
+		scoreUi.text = values.PopValue();
 	}
 
 	[ContextMenu("Test")]

@@ -2,7 +2,7 @@
 using UnityEditor;
 using System.Collections;
 
-namespace UWO 
+namespace UWO
 {
 
 [CustomEditor(typeof(SynchronizedObject))]
@@ -33,6 +33,7 @@ public class SynchronizedObjectEditor : Editor
 		} else {
 			SynchronizerEditorUtility.ReadOnlyTextField("Prefab Path", syncObj.prefabPath);
 		}
+		EditorGUILayout.Toggle("Is Local", syncObj.isLocal);
 	}
 
 	void SetPrefabPath()

@@ -4,23 +4,35 @@ using System.Collections;
 namespace UWO
 {
 
-public class SynchronizedObject : MonoBehaviour 
+public class SynchronizedObject : MonoBehaviour
 {
 	[HideInInspector]
 	public string id = System.Guid.Empty.ToString();
-	public bool isLocal = true;
-	public bool isSavedToServer = false;
-	public bool isOverridePrefab = false;
-	public bool isTakenOverToMaster = false;
+
+	private bool isLocal_ = true;
+	public bool isLocal
+	{
+		get { return isLocal_;  }
+		set { isLocal_ = value; }
+	}
 	public bool isRemote
 	{
-		get { return !isLocal;  }
-		set { isLocal = !value; }
+		get { return !isLocal_;  }
+		set { isLocal_ = !value; }
 	}
-	public bool isSetNetworkRigidBodyKinematicAutomatically = true;
+
+	[Tooltip("サーバ側へ状態を保存するよう通知する")]
+	public bool isSavedToServer = false;
+	[Tooltip("ローカルとリモートで出す Prefab を切り替える")]
+	public bool isOverridePrefab = false;
+	[Tooltip("ログアウトした時にオブジェクトをマスターへ引き継ぐ")]
+	public bool isTakenOverToMaster = false;
+	[Tooltip("リモートの isKinematic を ON にする")]
+	public bool isRigidBodySync = true;
 	[HideInInspector]
 	public string prefabPath = "Not Set";
 
+	[Tooltip("リモートから指定した時間以上反応がない時に消去する")]
 	public float deadTime = 5f;
 	private float noMessageElapsedTime_ = 0f;
 
@@ -39,6 +51,11 @@ public class SynchronizedObject : MonoBehaviour
 		}
 	}
 
+	void OnDestroy()
+	{
+		Synchronizer.UnregisterGameObject(id, isLocal);
+	}
+
 	void Update()
 	{
 		if (isRemote) {
@@ -52,14 +69,9 @@ public class SynchronizedObject : MonoBehaviour
 			}
 		}
 
-		if (isSetNetworkRigidBodyKinematicAutomatically && rigidbody_ != null) {
+		if (isRigidBodySync && rigidbody_ != null) {
 			rigidbody_.isKinematic = isRemote;
 		}
-	}
-
-	void OnDestroy()
-	{
-		Synchronizer.UnregisterGameObject(id, isLocal);
 	}
 
 	public void NotifyAlive()

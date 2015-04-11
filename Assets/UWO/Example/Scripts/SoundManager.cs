@@ -22,8 +22,10 @@ public class SoundManager : MonoBehaviour
 
 	public static void Play(string name, Vector3 position)
 	{
+		if (Instance == null || Instance.sounds.Length == 0) return;
+
 		var sound = Instance.sounds.FirstOrDefault(s => s.name == name);
-		if (!sound.Equals(default(Sound))) {
+		if (!sound.Equals(default(Sound)) && sound.audio != null) {
 			AudioSource.PlayClipAtPoint(sound.audio, position, sound.volume);
 		} else {
 			Debug.LogWarning(name + " is not registered sound");
