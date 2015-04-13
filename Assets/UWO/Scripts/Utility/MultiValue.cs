@@ -108,11 +108,6 @@ public class MultiValue
 		return value;
 	}
 
-	public string PopValue()
-	{
-		return Pop().value;
-	}
-	
 	private string Encode(string value)
 	{
 		return value.Replace(Value.DelimiterString, "").Replace(DelimiterString, "");

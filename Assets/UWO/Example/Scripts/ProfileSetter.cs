@@ -40,10 +40,10 @@ public class ProfileSetter : SynchronizedComponent
 
 	protected override void OnReceive(MultiValue values)
 	{
-		SetId(values.PopValue());
-		SetIconUrl(values.PopValue());
-		SetMessage(values.PopValue());
-		scoreUi.text = values.PopValue();
+		SetId(values.Pop().value);
+		SetIconUrl(values.Pop().value);
+		SetMessage(values.Pop().value);
+		scoreUi.text = values.Pop().value;
 	}
 
 	[ContextMenu("Test")]

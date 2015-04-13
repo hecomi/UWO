@@ -12,19 +12,19 @@ public class AnimationSync : SynchronizedComponent
 
 	protected override void OnSend()
 	{
-		var values = new MultiValue();
+		var data = new MultiValue();
 
 		foreach (var param in animator.parameters) {
-			values.Push(param.name);
+			data.Push(param.name);
 			switch (param.type) {
 				case AnimatorControllerParameterType.Bool:
-					values.Push(animator.GetBool(param.name));
+					data.Push(animator.GetBool(param.name));
 					break;
 				case AnimatorControllerParameterType.Int:
-					values.Push(animator.GetInteger(param.name));
+					data.Push(animator.GetInteger(param.name));
 					break;
 				case AnimatorControllerParameterType.Float:
-					values.Push(animator.GetFloat(param.name));
+					data.Push(animator.GetFloat(param.name));
 					break;
 				default:
 					Debug.LogWarning("No supported format: " + param.type);
@@ -32,13 +32,13 @@ public class AnimationSync : SynchronizedComponent
 			}
 		}
 
-		Send(values);
+		Send(data);
 	}
 
 	protected override void OnReceive(MultiValue data)
 	{
 		while (data.values.Count > 0) {
-			var name  = data.PopValue();
+			var name  = data.Pop().value;
 			var param = data.Pop();
 			switch (param.type) {
 				case "bool":

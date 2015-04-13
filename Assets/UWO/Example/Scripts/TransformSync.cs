@@ -28,19 +28,19 @@ public class TransformSync : SynchronizedComponent
 	{
 		if (isPositionSync) {
 			syncStartPos_ = transform.position;
-			syncEndPos_   = values.PopValue().AsVector3();
+			syncEndPos_   = values.Pop().value.AsVector3();
 			if (isFirst_) transform.position = syncEndPos_;
 		}
 
 		if (isRotationSync) {
 			syncStartRot_ = transform.rotation;
-			syncEndRot_   = values.PopValue().AsQuaternion();
+			syncEndRot_   = values.Pop().value.AsQuaternion();
 			if (isFirst_) transform.rotation = syncEndRot_;
 		}
 
 		if (isScaleSync) {
 			syncStartScale_ = transform.localScale;
-			syncEndScale_   = values.PopValue().AsVector3();
+			syncEndScale_   = values.Pop().value.AsVector3();
 			if (isFirst_) transform.localScale = syncEndScale_;
 		}
 
