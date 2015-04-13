@@ -26,9 +26,6 @@ public class AnimationSync : SynchronizedComponent
 				case AnimatorControllerParameterType.Float:
 					data.Push(animator.GetFloat(param.name));
 					break;
-				default:
-					Debug.LogWarning("No supported format: " + param.type);
-					break;
 			}
 		}
 
